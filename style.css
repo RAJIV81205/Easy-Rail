@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Dekko&family=Lemonada:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 
 *{
@@ -17,6 +19,8 @@ body{
     width: 100%;
     height: fit-content;
     background-color: rgba(241, 243, 248, 1);
+    justify-content: center;
+    align-items: center;
 }
 
 header{
@@ -83,4 +87,93 @@ ul li a {
   font-size: 1.2rem;
   color: #0A043C;
 
+}
+
+h1{
+    font-family: "Encode Sans Semi Expanded", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  text-decoration: 2px underline;
+}
+
+.container{
+    margin-top: 20px;
+    width: 80%;
+    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+}
+
+.main-box{
+    width: 545px;
+    height: 457px;
+    background-color: #A1D6E2;
+    border-radius: 17px;
+    border: 2px solid #0A043C;
+    box-shadow: 2px 2px 0 #0A043C;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.input-contain{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0;
+}
+
+input , select {
+    height: 40px;
+    padding: 0 5px;
+    border-radius: 8px;
+    border: 2px solid #0A043C;
+}
+
+.input-box{
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    height: 70px;
+    justify-content: space-around;
+}
+
+button{
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+    border: 2px solid whitesmoke;
+    background-color: #0A043C;
+    color: #A1D6E2;
+    cursor: pointer;
+
+}
+
+.input-bag{
+    height: fit-content;
+    width: 100%;
+    font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 0.85rem;
+
+}
+
+.pic{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pic img{
+    height: 375px;
+    width: 375px;
 }
