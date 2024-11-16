@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy-Rail</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="logo">
@@ -13,15 +15,77 @@
         </div>
         <div class="navbar">
             <ul>
-                <li><div class="box"><a href="#">Home</a></div></li>
-                <li><div class="box"><a href="#">Train Search</a></li>
-                <li><div class="box"><a href="#">PNR Status</a></div></li>
-                <li><div class="box"><a href="#">Ticket Booking</a></div></li>
-                <li><div class="box"><a href="#">Help</a></div></li>
+                <li>
+                    <div class="box"><a href="#">Home</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="#">Train Search</a>
+                </li>
+                <li>
+                    <div class="box"><a href="#">PNR Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="#">Ticket Booking</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="#">Help</a></div>
+                </li>
             </ul>
         </div>
         <div class="account"></div>
     </header>
+    <div class="container">
+        <div class="main-box">
+            <h1>Book Ticket</h1>
+            <div class="input-bag">
+                <div class="input-contain">
+                    <div class="input-box">
+                        <label for="From">From</label>
+                        <input type="text" class="from" placeholder="New Delhi">
+                    </div>
+                    <div class="input-box">
+                        <label for="To">To</label>
+                        <input type="text" class="to" placeholder="Mumbai">
+                    </div>
+                </div>
+                <div class="input-contain">
+                    <div class="input-box">
+                        <label for="class">Class</label>
+                        <select name="class" id="class">
+                            <option value="All Classes">All Classes</option>
+                            <option value="2S">2S</option>
+                            <option value="Sleeper">Sleeper</option>
+                            <option value="3rd AC">3rd AC</option>
+                            <option value="2nd AC">2nd AC</option>
+                            <option value="1st AC">1st AC</option>
+
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label for="date">Journey Date</label>
+                        <input type="date">
+                    </div>
+
+                </div>
+                <div class="input-contain">
+                    <div class="input-box">
+                        <label for="Quota">Quota</label>
+                        <select name="quota" id="quota">
+                            <option value="GENERAL">GENERAL</option>
+                            <option value="TATKAL">TATKAL</option>
+                            <option value="PREMIUM-TATKAL">PREMIUM TATKAL</option>
+                            <option value="LADIES">LADIES</option>
+                            <option value="SENIOR CITIZEN">SENIOR CITIZEN</option>
+                        </select>
+                    </div>
+                    <div class="input-box"></div>
+                </div>
+            </div>
+            <button>Search</button>
+        </div>
+        <div class="pic"><img src="https://i.ibb.co/Ht7y5Sn/Screenshot-2024-11-15-220318.png"></div>
+    </div>
     <script src="script.js"></script>
 </body>
+
 </html>
