@@ -5,9 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
   navLinks.forEach(link => {
     const linkText = link.textContent.trim(); // Get the text inside the anchor tag
     const linkHref = link.getAttribute("href");
+    const linkHref1 = linkHref.spilt(".");
 
     // Match the text or href with the current page
-    if (currentPage.includes(linkHref) || linkHref === "#") {
+    if (currentPage.includes(linkHref1) || linkHref === "#") {
       link.parentElement.classList.add("active-box"); // Add class to the parent div for styling
     } else {
       link.parentElement.classList.remove("active-box"); // Ensure others are not active
