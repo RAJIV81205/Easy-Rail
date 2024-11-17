@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <p>Easy-Rail</p>
+        </div>
+        <div class="navbar">
+            <ul>
+                <li>
+                    <div class="box"><a href="index.html">Home</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="train-search.html">Train Search</a>
+                </li>
+                <li>
+                    <div class="box"><a href="pnr-status.html">PNR Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="ticket-booking.html">Ticket Booking</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="help.html">Help</a></div>
+                </li>
+            </ul>
+        </div>
+        <div class="account">
+            <img src="img/user.png">
+        </div>
+    </header>
+
+    <div class="search-container">
+        <h1>Train Timetable</h1>
+        <input type="text" id="train-number" placeholder="Enter Train Number" />
+        <button onclick="fetchTrainDetails()">Search</button>
+        <div id="train-details">
+            <table id="train-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="train-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="schedule-container" id="schedule-container">
+    <h1>Train Schedule</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Station Name</th>
+                <th>Station Code</th>
+                <th>Arrival Time</th>
+                <th>Departure Time</th>
+                <th>Distance (km)</th>
+            </tr>
+        </thead>
+        <tbody id="train-schedule"></tbody>
+    </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
