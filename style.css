@@ -349,6 +349,10 @@ td {
     font-style: normal;
 }
 
+tr:nth-child(even){
+    background-color:#e8eded
+}
+
 th {
     background-color: #000000;
     /* Light blue */
