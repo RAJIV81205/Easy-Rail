@@ -42,38 +42,40 @@
         </div>
     </header>
 
-
+    <h1 class="heading">Train Timetable</h1>
     <div class="search-container">
-        <h1>Train Timetable</h1>
+
         <input type="text" id="train-number" placeholder="Enter Train Number" />
         <button onclick="fetchTrainDetails()">Search</button>
-        <div id="train-details">
-            <table id="train-table" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody id="train-table-body"></tbody>
-            </table>
-        </div>
+
+   </div>
+    <div id="train-details">
+        <table id="train-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="train-table-body"></tbody>
+        </table>
     </div>
+   
 
     <div class="schedule-container" id="schedule-container">
-    <h1>Train Schedule</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Station Name</th>
-                <th>Station Code</th>
-                <th>Arrival Time</th>
-                <th>Departure Time</th>
-                <th>Distance (km)</th>
-            </tr>
-        </thead>
-        <tbody id="train-schedule"></tbody>
-    </table>
+        <h1>Train Schedule</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Station Name</th>
+                    <th>Station Code</th>
+                    <th>Arrival Time</th>
+                    <th>Departure Time</th>
+                    <th>Distance (km)</th>
+                </tr>
+            </thead>
+            <tbody id="train-schedule"></tbody>
+        </table>
     </div>
     <script src="script.js"></script>
 </body>
