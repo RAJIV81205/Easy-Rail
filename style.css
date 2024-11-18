@@ -119,7 +119,7 @@ header {
 }
 
 /* Responsive Styling */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
     .navbar {
         display: none;
         flex-direction: column;
@@ -156,6 +156,23 @@ header {
     .input-contain{
         display: flex;
         flex-direction: column !important;
+    }
+
+    .search-container input , .search-container button {
+        margin-top: 10px;
+    }
+
+    .pic img{
+        height: 300px !important;
+        width: 300px !important;
+        margin: 50px 0;
+    }
+
+
+
+    th,td{
+        padding: 5px;
+        font-size: 0.8rem;
     }
 }
 
@@ -265,9 +282,14 @@ button {
     width: 375px;
 }
 
+.heading{
+    margin-top: 30px;
+}
+
 .search-container {
-    margin-top: 100px;
-    width: 400px;
+    margin-top: 20px;
+    width: 80%;
+    min-height: fit-content;
     background-color: #A1D6E2;
     /* Slightly lighter gray */
     border: 2px solid #0A043C;
@@ -276,6 +298,11 @@ button {
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .search-container h1 {
@@ -284,9 +311,8 @@ button {
 }
 
 .search-container input[type="text"] {
-    width: 80%;
+    width: 70%;
     padding: 5px;
-    margin-bottom: 15px;
     border: 2px solid #000000;
     border-radius: 10px;
     background-color: #ffffff;
@@ -303,6 +329,7 @@ button {
     border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100px;
 }
 
 .search-container button:hover {
@@ -311,8 +338,9 @@ button {
 
 #train-details {
     margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #A1D6E2;
+    width: 80%;
+    padding: 2px;
+    border: 1px solid #000000;
     border-radius: 5px;
     background-color: #A1D6E2;
     color: #0A043C;
@@ -349,15 +377,15 @@ td {
     font-style: normal;
 }
 
-tr:nth-child(even){
-    background-color:#e8eded
-}
-
 th {
     background-color: #000000;
     /* Light blue */
     color: #ffffff;
     /* Dark text */
+}
+
+tr:nth-child(even){
+    background-color:#e8eded
 }
 
 .schedule-container {
