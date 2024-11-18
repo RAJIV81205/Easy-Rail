@@ -51,13 +51,15 @@
                 <div class="input-contain">
                     <div class="input-box">
                         <label for="From">From</label>
-                        <input type="text" class="from" placeholder="New Delhi">
+                        <input type="text" id="from" placeholder="New Delhi" oninput="searchStationFrom()">
+                        <div class="suggestions-from" id="suggestions-from"></div>
                     </div>
                     <img src="https://i.ibb.co/9gQFzhG/change.png">
                     </lord-icon>
                     <div class="input-box">
                         <label for="To">To</label>
-                        <input type="text" class="to" placeholder="Mumbai" >
+                        <input type="text" id="to" placeholder="Mumbai" oninput="searchStationTo()">
+                        <div class="suggestions-to" id="suggestions-to"></div>
                     </div>
                 </div>
                 <div class="input-contain">
@@ -93,10 +95,11 @@
                     <div class="input-box"></div>
                 </div>
             </div>
-            <button>Search</button>
+            <button id="main-search">Search</button>
         </div>
         <div class="pic"><img src="https://i.ibb.co/Ht7y5Sn/Screenshot-2024-11-15-220318.png"></div>
     </div>
+    <div id="train-results"></div>
     <script src="script.js"></script>
 </body>
 
