@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPage = window.location.pathname.split("/").pop()+".html"; // Get the current page filename
+  const currentPage = "https://easy-rail.netlify.app/"+window.location.pathname.split("/").pop()+".html"; // Get the current page filename
   const navLinks = document.querySelectorAll(".navbar .box a");
 
   navLinks.forEach(link => {
