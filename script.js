@@ -1,14 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPage = window.location.pathname.split("/").pop(); // Get the current page filename
+  const currentPage = window.location.pathname.split("/").pop()+".html"; // Get the current page filename
   const navLinks = document.querySelectorAll(".navbar .box a");
 
   navLinks.forEach(link => {
     const linkText = link.textContent.trim(); // Get the text inside the anchor tag
     const linkHref = link.getAttribute("href");
-    const linkHref1 = linkHref.spilt("/");
 
     // Match the text or href with the current page
-    if (currentPage.includes(linkHref1) || linkHref === "#") {
+    if (currentPage.includes(linkHref) || linkHref === "#") {
       link.parentElement.classList.add("active-box"); // Add class to the parent div for styling
     } else {
       link.parentElement.classList.remove("active-box"); // Ensure others are not active
