@@ -216,3 +216,288 @@ function parseTrainRoute(string) {
 }
 
 
+
+
+
+function searchStationFrom() {
+  input = document.getElementById("from").value;
+  if (input.length < 2) {
+    const suggestionsBox = document.getElementById("suggestions-from");
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = "";
+    return;
+  }
+  filterStationFrom(input);
+}
+
+
+
+
+
+function filterStationFrom(input) {
+  const suggestionsBox = document.getElementById("suggestions-from");
+
+  if (input) {
+    fetch('stations.json')
+      .then(response => response.json())
+      .then(data => {
+       
+
+        const stationnaam = data.stations; // Access the stations array
+        
+
+        // Filter stations
+        const filteredStations = stationnaam.filter(station =>
+          station.stnName.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCode.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCity.toLowerCase().includes(input.toLowerCase())
+        );
+
+
+        // Display suggestions
+        if (filteredStations.length === 0) {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "<div class='no-results'>No results found</div>";
+        } else {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = ""; // Clear previous suggestions
+
+          filteredStations.forEach(station => {
+            const suggestionItem = document.createElement("div");
+            suggestionItem.classList.add("suggestion-item");
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode}) - ${station.stnCity}`;
+            suggestionItem.addEventListener("click", () => {
+              document.getElementById("from").value = station.stnCode; // Set input value
+              suggestionsBox.style.display = "none"; // Clear suggestions
+              suggestionsBox.innerHTML = ""; // Clear suggestions
+            });
+            suggestionsBox.appendChild(suggestionItem);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+  } else {
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = ""; // Clear suggestions if input is empty
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function searchStationTo() {
+  input = document.getElementById("to").value;
+  if (input.length < 2) {
+    const suggestionsBox = document.getElementById("suggestions-to");
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = "";
+    return;
+  }
+  filterStationTo(input);
+}
+
+
+
+
+
+function filterStationTo(input) {
+  const suggestionsBox = document.getElementById("suggestions-to");
+
+  if (input) {
+    fetch('stations.json')
+      .then(response => response.json())
+      .then(data => {
+        
+
+        const stationnaam = data.stations; // Access the stations array
+       
+
+        // Filter stations
+        const filteredStations = stationnaam.filter(station =>
+          station.stnName.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCode.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCity.toLowerCase().includes(input.toLowerCase())
+        );
+
+
+        // Display suggestions
+        if (filteredStations.length === 0) {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "<div class='no-results'>No results found</div>";
+        } else {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = ""; // Clear previous suggestions
+
+          filteredStations.forEach(station => {
+            const suggestionItem = document.createElement("div");
+            suggestionItem.classList.add("suggestion-item");
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode}) - ${station.stnCity}`;
+            suggestionItem.addEventListener("click", () => {
+              document.getElementById("to").value = station.stnCode; // Set input value
+              suggestionsBox.style.display = "none"; // Clear suggestions
+              suggestionsBox.innerHTML = ""; // Clear suggestions
+            });
+            suggestionsBox.appendChild(suggestionItem);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+  } else {
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = ""; // Clear suggestions if input is empty
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("main-search").addEventListener("click", function () {
+  const from = document.getElementById("from").value.toLowerCase().trim();
+  const to = document.getElementById("to").value.toLowerCase().trim();
+
+  // Check if both input fields have values
+  if (!from || !to) {
+    alert("Please enter both 'From' and 'To' stations.");
+    return;
+  }
+
+  const apiUrl = `https://erail.in/rail/getTrains.aspx?Station_From=${from}&Station_To=${to}&DataSource=0&Language=0&Cache=true`;
+
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok. Status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(data => {
+      const result = parseTrainData(data);
+
+      if (result.success) {
+        console.log("Trains Found:", result.data);
+        displayTrains(result.data); // Display trains if found
+      } else {
+        console.warn("No trains found:", result.data);
+        alert(result.data); // Alert user if no trains are found
+      }
+    })
+    .catch(error => {
+      console.error("Fetch error:", error);
+      alert("An error occurred while fetching train data. Please try again.");
+    });
+});
+
+function parseTrainData(data) {
+  try {
+    const retval = {};
+    const arr = [];
+    const rawData = data.split("~~~~~~~~");
+
+    // Check for error messages
+    if (rawData[0].includes("No direct trains found")) {
+      return {
+        success: false,
+        time_stamp: Date.now(),
+        data: "No direct trains found between the selected stations."
+      };
+    }
+
+    if (
+      rawData[0].includes("Please try again after some time.") ||
+      rawData[0].includes("From station not found") ||
+      rawData[0].includes("To station not found")
+    ) {
+      return {
+        success: false,
+        time_stamp: Date.now(),
+        data: rawData[0].replace(/~/g, "")
+      };
+    }
+
+    // Filter valid data and parse trains
+    const filteredData = rawData.filter(el => el.trim() !== "");
+    for (let i = 0; i < filteredData.length; i++) {
+      const trainData = filteredData[i].split("~^");
+
+      if (trainData.length === 2) {
+        const details = trainData[1].split("~").filter(el => el.trim() !== "");
+        if (details.length >= 14) {
+          arr.push({
+            train_no: details[0],
+            train_name: details[1],
+            source_stn_name: details[2],
+            source_stn_code: details[3],
+            dstn_stn_name: details[4],
+            dstn_stn_code: details[5],
+            from_stn_name: details[6],
+            from_stn_code: details[7],
+            to_stn_name: details[8],
+            to_stn_code: details[9],
+            from_time: details[10],
+            to_time: details[11],
+            travel_time: details[12],
+            running_days: details[13]
+          });
+        }
+      }
+    }
+
+    return {
+      success: true,
+      time_stamp: Date.now(),
+      data: arr
+    };
+  } catch (err) {
+    console.error("Parsing error:", err);
+    return {
+      success: false,
+      time_stamp: Date.now(),
+      data: "An error occurred while processing train data."
+    };
+  }
+}
+
+function displayTrains(trains) {
+  const resultContainer = document.getElementById("train-results");
+  resultContainer.innerHTML = ""; // Clear previous results
+
+  if (trains.length === 0) {
+    resultContainer.innerHTML = "<p>No trains found for the selected route.</p>";
+    return;
+  }
+
+  trains.forEach(train => {
+    const trainItem = document.createElement("div");
+    trainItem.classList.add("train-item");
+    trainItem.innerHTML = `
+      <p><strong>${train.train_name} (${train.train_no})</strong></p>
+      <p>From: ${train.from_stn_name} (${train.from_stn_code}) at ${train.from_time}</p>
+      <p>To: ${train.to_stn_name} (${train.to_stn_code}) at ${train.to_time}</p>
+      <p>Travel Time: ${train.travel_time}</p>
+      <p>Running Days: ${train.running_days}</p>
+    `;
+    resultContainer.appendChild(trainItem);
+  });
+}
+
