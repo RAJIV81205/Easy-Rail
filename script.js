@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const linkHref = link.getAttribute("href");
 
     // Match the text or href with the current page
-    if (currentPage.includes(linkHref) || linkHref === "#") {
+    if (currentPage===linkHref || linkHref === "#") {
       link.parentElement.classList.add("active-box"); // Add class to the parent div for styling
     } else {
       link.parentElement.classList.remove("active-box"); // Ensure others are not active
