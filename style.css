@@ -158,6 +158,8 @@ header {
         flex-direction: column !important;
     }
 
+    
+
     .search-container input , .search-container button {
         margin-top: 10px;
     }
@@ -174,6 +176,21 @@ header {
         padding: 5px;
         font-size: 0.8rem;
     }
+
+    .suggestions-from ,  .suggestions-to{
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #000000;
+        border-top: none;
+        height: 220px;
+        overflow-y: auto;
+        width: 65% !important;
+        margin-top: 290px !important;
+        z-index: 10;
+        display: none;
+    
+    }
+    
 }
 
 
@@ -268,6 +285,27 @@ button {
     font-style: normal;
     font-size: 0.85rem;
 
+}
+
+.suggestions-from , .suggestions-to{
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    height: 200px;
+    overflow-y: auto;
+    width: 30%;
+    margin-top: 280px;
+    z-index: 10;
+    display: none;
+
+}
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background-color: #f0f0f0;
 }
 
 .pic {
