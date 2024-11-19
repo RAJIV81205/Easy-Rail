@@ -181,6 +181,15 @@ header {
         font-size: 0.8rem;
     }
 
+    .train-item{
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    .train-body{
+        font-size: 0.9rem;
+    }
+
     .suggestions-from ,  .suggestions-to{
         position: absolute;
         background-color: #fff;
@@ -444,11 +453,12 @@ tr:nth-child(even){
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    max-width: 90%;
+    max-width: 98%;
 }
 
 .train-item {
-    border: 1px solid #ddd;
+    border: 1px solid #000000;
+    box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.384);
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
@@ -460,6 +470,7 @@ tr:nth-child(even){
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
+
   }
   
   .train-header {
@@ -473,10 +484,6 @@ tr:nth-child(even){
     margin: 0;
   }
   
-  .train-header span {
-    font-size: 14px;
-    color: #999;
-  }
   
   .train-body {
     display: flex;
@@ -484,6 +491,18 @@ tr:nth-child(even){
     justify-content: space-between;
     margin-top: 12px;
   }
+
+
+.running-days {
+    font-size: 14px;
+    color: #000000;
+    
+  }
+  
+  .running-days .inactive {
+    color: #ccc; /* Grayed out for inactive days */
+  }
+  
   
   .train-body div {
     text-align: center;
