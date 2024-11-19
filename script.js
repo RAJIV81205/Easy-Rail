@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPage = window.location.pathname; // Get the current page filename
+  const currentPage = window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
 
   navLinks.forEach(link => {
-    const linkText = link.textContent.trim(); // Get the text inside the anchor tag
+    const linkText = link.textContent.trim();
     const linkHref = link.getAttribute("href");
 
 
-    // Match the text or href with the current page
+
     if (currentPage === linkHref || linkHref === "#") {
-      link.parentElement.classList.add("active-box"); // Add class to the parent div for styling
+      link.parentElement.classList.add("active-box");
     } else {
-      link.parentElement.classList.remove("active-box"); // Ensure others are not active
+      link.parentElement.classList.remove("active-box");
     }
   });
 });
@@ -37,7 +37,6 @@ async function fetchTrainDetails() {
   document.getElementById("schedule-container").style.display = "none";
 
 
-  // Hide the table initially
   trainTable.style.display = "none";
 
   if (!trainNumber) {
@@ -46,23 +45,25 @@ async function fetchTrainDetails() {
   }
 
   try {
-    // Fetch train details from the API
     const response = await fetch(
       `https://erail.in/rail/getTrains.aspx?TrainNo=${trainNumber}&DataSource=0&Language=0&Cache=true`
     );
     const rawData = await response.text();
 
 
-    // Process the raw data into readable format
+
     const trainInfo = CheckTrain(rawData);
 
     if (trainInfo.success) {
       const data = trainInfo.data;
 
-      // Clear the table body
-      trainTableBody.innerHTML = "";
 
-      // Add rows for train details
+      trainTableBody.innerHTML = "";
+      document.getElementById("train-details").style.padding="10px";
+      document.getElementById("train-details").style.border="2px solid black";
+
+
+
       const details = [
         { field: "Train Number", value: data.train_no },
         { field: "Train Name", value: data.train_name },
@@ -88,7 +89,7 @@ async function fetchTrainDetails() {
         trainTableBody.appendChild(row);
       });
 
-      // Show the table
+
       trainTable.style.display = "table";
     } else {
       const trainScheduleBody = document.getElementById('train-schedule');
@@ -103,7 +104,7 @@ async function fetchTrainDetails() {
   }
 }
 
-// Function to process raw train data from the API
+
 function CheckTrain(string) {
   try {
     let obj = {};
@@ -183,31 +184,31 @@ async function getRoute(train_id) {
 
 function parseTrainRoute(string) {
   try {
-    // Split the input string into individual train stoppages
+
     let data = string.split("~^");
 
-    // Map each stoppage to a structured object
+
     let arr = data.map((item) => {
-      let details = item.split("~").filter((el) => el !== ""); // Remove empty elements
+      let details = item.split("~").filter((el) => el !== "");
       return {
-        source_stn_name: details[2],  // Station name
-        source_stn_code: details[1], // Station code
-        arrive: details[3].replace(".", ":"),          // Arrival time
-        depart: details[4].replace(".", ":"),          // Departure time
-        distance: details[6],        // Distance covered
-        day: details[7],             // Day of travel
-        zone: details[9],            // Railway zone
+        source_stn_name: details[2],
+        source_stn_code: details[1],
+        arrive: details[3].replace(".", ":"),
+        depart: details[4].replace(".", ":"),
+        distance: details[6],
+        day: details[7],
+        zone: details[9],
       };
     });
 
-    // Return the result with metadata
+
     return {
       success: true,
       time_stamp: Date.now(),
       data: arr,
     };
   } catch (err) {
-    // Handle errors gracefully
+
     console.error("Error parsing train route data:", err.message);
     return {
       success: false,
@@ -249,10 +250,10 @@ function filterStationFrom(input) {
       .then(data => {
 
 
-        const stationnaam = data.stations; // Access the stations array
+        const stationnaam = data.stations;
 
 
-        // Filter stations
+
         const filteredStations = stationnaam.filter(station =>
           station.stnName.toLowerCase().includes(input.toLowerCase()) ||
           station.stnCode.toLowerCase().includes(input.toLowerCase()) ||
@@ -260,23 +261,22 @@ function filterStationFrom(input) {
         );
 
 
-        // Display suggestions
+
         if (filteredStations.length === 0) {
           suggestionsBox.style.display = "block";
           suggestionsBox.innerHTML = "<div class='no-results'>No results found</div>";
         } else {
           suggestionsBox.style.display = "block";
-          suggestionsBox.innerHTML = ""; // Clear previous suggestions
-
+          suggestionsBox.innerHTML = "";
           filteredStations.forEach(station => {
             const suggestionItem = document.createElement("div");
             suggestionItem.classList.add("suggestion-item");
             suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
             suggestionItem.addEventListener("click", () => {
-              document.getElementById("from").value = `${station.stnName} (${station.stnCode})`; // Set input value
-              sessionStorage.setItem("from",`${station.stnCode}`)
-              suggestionsBox.style.display = "none"; // Clear suggestions
-              suggestionsBox.innerHTML = ""; // Clear suggestions
+              document.getElementById("from").value = `${station.stnName} (${station.stnCode})`;
+              sessionStorage.setItem("from", `${station.stnCode}`)
+              suggestionsBox.style.display = "none";
+              suggestionsBox.innerHTML = "";
             });
             suggestionsBox.appendChild(suggestionItem);
           });
@@ -287,7 +287,7 @@ function filterStationFrom(input) {
       });
   } else {
     suggestionsBox.style.display = "none";
-    suggestionsBox.innerHTML = ""; // Clear suggestions if input is empty
+    suggestionsBox.innerHTML = "";
   }
 }
 
@@ -328,7 +328,7 @@ function filterStationTo(input) {
       .then(data => {
 
 
-        const stationnaam = data.stations; // Access the stations array
+        const stationnaam = data.stations;
 
 
         // Filter stations
@@ -353,7 +353,7 @@ function filterStationTo(input) {
             suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
             suggestionItem.addEventListener("click", () => {
               document.getElementById("to").value = `${station.stnName} (${station.stnCode})`; // Set input value
-              sessionStorage.setItem("to",`${station.stnCode}`)
+              sessionStorage.setItem("to", `${station.stnCode}`)
               suggestionsBox.style.display = "none"; // Clear suggestions
               suggestionsBox.innerHTML = ""; // Clear suggestions
             });
@@ -473,12 +473,12 @@ function parseTrainData(data) {
             from_stn_code: details[7],
             to_stn_name: details[8],
             to_stn_code: details[9],
-            from_time: details[10].replace(".",":"),
-            to_time: details[11].replace(".",":"),
-            travel_time: details[12].replace(".",":") + " hrs",
+            from_time: details[10].replace(".", ":"),
+            to_time: details[11].replace(".", ":"),
+            travel_time: details[12].replace(".", ":") + " hrs",
             running_days: details[13],
             distance: details2[18] || "N/A", // Use "N/A" if distance is unavailable
-            halts:details2[7]-details2[4]-1
+            halts: details2[7] - details2[4] - 1
           });
         }
       }
@@ -507,22 +507,24 @@ function parseTrainData(data) {
 
 
 
-
 function displayTrains(trains) {
   const resultContainer = document.getElementById("train-results");
-  resultContainer.innerHTML = ""; // Clear previous results
+  resultContainer.innerHTML = "";
+  const from = sessionStorage.getItem("from").trim();
+  const to = sessionStorage.getItem("to").trim();
 
   if (trains.length === 0) {
     resultContainer.innerHTML = "<p>No trains found for the selected route.</p>";
     return;
   }
 
+  resultContainer.innerHTML = `<h1>List of Trains from ${from} to ${to}.</h1>`;
   trains.forEach(train => {
     const trainItem = document.createElement("div");
     trainItem.classList.add("train-item");
 
-    // Convert running days binary to weekday string
-    const weekdays = ["M", "T", "W", "T", "F", "S" , "S"];
+
+    const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
     const runningDaysFormatted = train.running_days
       .split("")
       .map((bit, index) => (bit === "1" ? weekdays[index] : `<span class="inactive">${weekdays[index]}</span>`))
@@ -535,7 +537,7 @@ function displayTrains(trains) {
       </div>
       <div class="train-body">
         <div>
-          <strong>${train.from_stn_code}, ${train.from_time}</strong>
+          <strong>${train.from_stn_code} - ${train.from_time}</strong>
           <p>${train.from_stn_name}</p>
         </div>
         <div>
@@ -544,7 +546,7 @@ function displayTrains(trains) {
           <p>${train.halts || "N/A"} halts | ${train.distance || "N/A"} kms</p>
         </div>
         <div>
-          <strong>${train.to_stn_code}, ${train.to_time}</strong>
+          <strong>${train.to_stn_code} - ${train.to_time}</strong>
           <p>${train.to_stn_name}</p>
         </div>
       </div>
