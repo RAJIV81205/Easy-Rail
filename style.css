@@ -140,57 +140,68 @@ header {
         display: flex;
     }
 
-    ul{
+    ul {
         display: flex;
         flex-direction: column;
         padding: 25px 0;
 
     }
 
-    .main-box{
+    .main-box {
         width: 90% !important;
         height: fit-content !important;
         padding: 25px 0;
     }
 
-    .input-contain{
+    .input-contain {
         display: flex;
         flex-direction: column !important;
     }
 
-    
 
-    .search-container input , .search-container button {
+
+    .search-container input,
+    .search-container button {
         margin-top: 10px;
     }
 
-    .pic img{
+    .pic img {
         height: 300px !important;
         width: 300px !important;
         margin: 50px 0;
     }
 
-    .input-contain img{
+    .input-contain img {
         transform: rotate(90deg);
     }
 
 
 
-    th,td{
+    th,
+    td {
         padding: 5px;
         font-size: 0.8rem;
     }
 
-    .train-item{
+    #train-results {
+        margin-top: 25px;
+    }
+
+    #train-results h1 {
+        font-size: 1.5rem;
+    }
+
+    .train-item {
         width: 100% !important;
         padding: 10px !important;
     }
 
-    .train-body{
+    .train-body {
         font-size: 0.9rem;
     }
 
-    .suggestions-from ,  .suggestions-to{
+    .suggestions-from,
+    .suggestions-to {
         position: absolute;
         background-color: #fff;
         border: 1px solid #000000;
@@ -201,9 +212,9 @@ header {
         margin-top: 290px !important;
         z-index: 10;
         display: none;
-    
+
     }
-    
+
 }
 
 
@@ -300,7 +311,8 @@ button {
 
 }
 
-.suggestions-from , .suggestions-to{
+.suggestions-from,
+.suggestions-to {
     position: absolute;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -313,10 +325,12 @@ button {
     display: none;
 
 }
+
 .suggestion-item {
     padding: 10px;
     cursor: pointer;
 }
+
 .suggestion-item:hover {
     background-color: #f0f0f0;
 }
@@ -333,7 +347,7 @@ button {
     width: 375px;
 }
 
-.heading{
+.heading {
     margin-top: 30px;
 }
 
@@ -390,8 +404,6 @@ button {
 #train-details {
     margin-top: 20px;
     width: 80%;
-    padding: 2px;
-    border: 1px solid #000000;
     border-radius: 5px;
     background-color: #A1D6E2;
     color: #0A043C;
@@ -424,7 +436,7 @@ td {
     text-align: center;
     border: 1px solid #ddd;
     font-family: "Ubuntu", sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
 }
 
@@ -435,8 +447,8 @@ th {
     /* Dark text */
 }
 
-tr:nth-child(even){
-    background-color:#e8eded
+tr:nth-child(even) {
+    background-color: #e8eded
 }
 
 .schedule-container {
@@ -448,12 +460,19 @@ tr:nth-child(even){
     margin: 50px 0;
 }
 
-#train-results{
+#train-results {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
     max-width: 98%;
+}
+
+#train-results h1 {
+    font-size: 2rem;
+    margin: 25px 0;
+    width: 100%;
+    text-align: center;
 }
 
 .train-item {
@@ -466,71 +485,74 @@ tr:nth-child(even){
     height: 200px;
     padding: 16px;
     margin: 16px 0;
-    background-color: #f9f9f9;
+    background-color: #ddf7f3;
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
 
-  }
-  
-  .train-header {
+}
+
+.train-item:nth-of-type(even){
+    background-color: #ddf7f3;
+}
+
+.train-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  
-  .train-header h2 {
+}
+
+.train-header h2 {
     font-size: 1rem;
     margin: 0;
-  }
-  
-  
-  .train-body {
+}
+
+
+.train-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 12px;
-  }
+}
 
 
 .running-days {
     font-size: 14px;
     color: #000000;
-    
-  }
-  
-  .running-days .inactive {
-    color: #ccc; /* Grayed out for inactive days */
-  }
-  
-  
-  .train-body div {
+
+}
+
+.running-days .inactive {
+    color: #ccc;
+    /* Grayed out for inactive days */
+}
+
+
+.train-body div {
     text-align: center;
     flex: 1;
-  }
-  
-  .train-body div p {
+}
+
+.train-body div p {
     margin: 4px 0;
-  }
-  
-  .train-footer {
+}
+
+.train-footer {
     margin-top: 16px;
     display: flex;
     justify-content: space-between;
-  }
-  
-  .train-footer span {
+}
+
+.train-footer span {
     font-size: 14px;
     color: #666;
-  }
-  
-  .train-footer .timetable-link {
+}
+
+.train-footer .timetable-link {
     color: #007bff;
     text-decoration: none;
-  }
-  
-  .train-footer .timetable-link:hover {
-    text-decoration: underline;
-  }
-  
+}
 
+.train-footer .timetable-link:hover {
+    text-decoration: underline;
+}
