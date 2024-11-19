@@ -6,8 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const linkText = link.textContent.trim(); // Get the text inside the anchor tag
     const linkHref = link.getAttribute("href");
 
+
     // Match the text or href with the current page
-    if (currentPage===linkHref || linkHref === "#") {
+    if (currentPage === linkHref || linkHref === "#") {
       link.parentElement.classList.add("active-box"); // Add class to the parent div for styling
     } else {
       link.parentElement.classList.remove("active-box"); // Ensure others are not active
@@ -20,7 +21,7 @@ const hamburger = document.getElementById('hamburger');
 const navbar = document.getElementById('navbar');
 
 hamburger.addEventListener('click', () => {
-    navbar.classList.toggle('active');
+  navbar.classList.toggle('active');
 });
 
 
@@ -50,7 +51,7 @@ async function fetchTrainDetails() {
       `https://erail.in/rail/getTrains.aspx?TrainNo=${trainNumber}&DataSource=0&Language=0&Cache=true`
     );
     const rawData = await response.text();
-    
+
 
     // Process the raw data into readable format
     const trainInfo = CheckTrain(rawData);
@@ -219,6 +220,11 @@ function parseTrainRoute(string) {
 
 
 
+
+
+
+
+
 function searchStationFrom() {
   input = document.getElementById("from").value;
   if (input.length < 2) {
@@ -241,10 +247,10 @@ function filterStationFrom(input) {
     fetch('stations.json')
       .then(response => response.json())
       .then(data => {
-       
+
 
         const stationnaam = data.stations; // Access the stations array
-        
+
 
         // Filter stations
         const filteredStations = stationnaam.filter(station =>
@@ -265,9 +271,10 @@ function filterStationFrom(input) {
           filteredStations.forEach(station => {
             const suggestionItem = document.createElement("div");
             suggestionItem.classList.add("suggestion-item");
-            suggestionItem.textContent = `${station.stnName} (${station.stnCode}) - ${station.stnCity}`;
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
             suggestionItem.addEventListener("click", () => {
-              document.getElementById("from").value = station.stnCode; // Set input value
+              document.getElementById("from").value = `${station.stnName} (${station.stnCode})`; // Set input value
+              sessionStorage.setItem("from",`${station.stnCode}`)
               suggestionsBox.style.display = "none"; // Clear suggestions
               suggestionsBox.innerHTML = ""; // Clear suggestions
             });
@@ -319,10 +326,10 @@ function filterStationTo(input) {
     fetch('stations.json')
       .then(response => response.json())
       .then(data => {
-        
+
 
         const stationnaam = data.stations; // Access the stations array
-       
+
 
         // Filter stations
         const filteredStations = stationnaam.filter(station =>
@@ -343,9 +350,10 @@ function filterStationTo(input) {
           filteredStations.forEach(station => {
             const suggestionItem = document.createElement("div");
             suggestionItem.classList.add("suggestion-item");
-            suggestionItem.textContent = `${station.stnName} (${station.stnCode}) - ${station.stnCity}`;
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
             suggestionItem.addEventListener("click", () => {
-              document.getElementById("to").value = station.stnCode; // Set input value
+              document.getElementById("to").value = `${station.stnName} (${station.stnCode})`; // Set input value
+              sessionStorage.setItem("to",`${station.stnCode}`)
               suggestionsBox.style.display = "none"; // Clear suggestions
               suggestionsBox.innerHTML = ""; // Clear suggestions
             });
@@ -373,8 +381,8 @@ function filterStationTo(input) {
 
 
 document.getElementById("main-search").addEventListener("click", function () {
-  const from = document.getElementById("from").value.toLowerCase().trim();
-  const to = document.getElementById("to").value.toLowerCase().trim();
+  const from = sessionStorage.getItem("from").toLowerCase().trim();
+  const to = sessionStorage.getItem("to").toLowerCase().trim();
 
   // Check if both input fields have values
   if (!from || !to) {
@@ -410,16 +418,16 @@ document.getElementById("main-search").addEventListener("click", function () {
 
 function parseTrainData(data) {
   try {
-    const retval = {};
     const arr = [];
-    const rawData = data.split("~~~~~~~~");
+    const rawData = data.split("~~~~~~~~").filter((el) => el.trim() !== ""); // Filter valid data
+    console.log("Raw Data:", rawData);
 
     // Check for error messages
     if (rawData[0].includes("No direct trains found")) {
       return {
         success: false,
         time_stamp: Date.now(),
-        data: "No direct trains found between the selected stations."
+        data: "No direct trains found between the selected stations.",
       };
     }
 
@@ -431,17 +439,28 @@ function parseTrainData(data) {
       return {
         success: false,
         time_stamp: Date.now(),
-        data: rawData[0].replace(/~/g, "")
+        data: rawData[0].replace(/~/g, ""),
       };
     }
 
-    // Filter valid data and parse trains
-    const filteredData = rawData.filter(el => el.trim() !== "");
-    for (let i = 0; i < filteredData.length; i++) {
-      const trainData = filteredData[i].split("~^");
+    // Parse each train's details
+    for (let i = 0; i < rawData.length; i++) {
+      const trainData = rawData[i].split("~^");
+      const nextData = rawData[i + 1] || ""; // Ensure next data exists or use an empty string
+      const trainData2 = nextData.split("~^");
+
+      console.log("Train Data:", trainData);
+      console.log("Train Data 2:", trainData2);
 
       if (trainData.length === 2) {
-        const details = trainData[1].split("~").filter(el => el.trim() !== "");
+        const details = trainData[1].split("~").filter((el) => el.trim() !== "");
+        const details2 = trainData2[0]
+          ? trainData2[0].split("~").filter((el) => el.trim() !== "")
+          : []; // Handle empty trainData2 safely
+
+        console.log("Details:", details);
+        console.log("Details 2:", details2);
+
         if (details.length >= 14) {
           arr.push({
             train_no: details[0],
@@ -454,10 +473,12 @@ function parseTrainData(data) {
             from_stn_code: details[7],
             to_stn_name: details[8],
             to_stn_code: details[9],
-            from_time: details[10],
-            to_time: details[11],
-            travel_time: details[12],
-            running_days: details[13]
+            from_time: details[10].replace(".",":"),
+            to_time: details[11].replace(".",":"),
+            travel_time: details[12].replace(".",":") + " hrs",
+            running_days: details[13],
+            distance: details2[18] || "N/A", // Use "N/A" if distance is unavailable
+            halts:details2[7]-details2[4]-1
           });
         }
       }
@@ -466,17 +487,25 @@ function parseTrainData(data) {
     return {
       success: true,
       time_stamp: Date.now(),
-      data: arr
+      data: arr,
     };
   } catch (err) {
     console.error("Parsing error:", err);
     return {
       success: false,
       time_stamp: Date.now(),
-      data: "An error occurred while processing train data."
+      data: "An error occurred while processing train data.",
     };
   }
 }
+
+
+
+
+
+
+
+
 
 function displayTrains(trains) {
   const resultContainer = document.getElementById("train-results");
@@ -490,14 +519,33 @@ function displayTrains(trains) {
   trains.forEach(train => {
     const trainItem = document.createElement("div");
     trainItem.classList.add("train-item");
+
     trainItem.innerHTML = `
-      <p><strong>${train.train_name} (${train.train_no})</strong></p>
-      <p>From: ${train.from_stn_name} (${train.from_stn_code}) at ${train.from_time}</p>
-      <p>To: ${train.to_stn_name} (${train.to_stn_code}) at ${train.to_time}</p>
-      <p>Travel Time: ${train.travel_time}</p>
-      <p>Running Days: ${train.running_days}</p>
+      <div class="train-header">
+        <h2>${train.train_name} (${train.train_no})</h2>
+        <span>Runs on: ${train.running_days}</span>
+      </div>
+      <div class="train-body">
+        <div>
+          <strong>${train.from_stn_code}, ${train.from_time}</strong>
+          <p>${train.from_stn_name}</p>
+        </div>
+        <div>
+          <span>🚆</span>
+          <p>${train.travel_time}</p>
+          <p>${train.halts || "N/A"} halts | ${train.distance || "N/A"} kms</p>
+        </div>
+        <div>
+          <strong>${train.to_stn_code}, ${train.to_time}</strong>
+          <p>${train.to_stn_name}</p>
+        </div>
+      </div>
+      <div class="train-footer">
+        <span>${train.source_stn_name} ➡ ${train.dstn_stn_name}</span>
+        <a href="#" class="timetable-link">Time Table</a>
+      </div>
     `;
+
     resultContainer.appendChild(trainItem);
   });
 }
-
