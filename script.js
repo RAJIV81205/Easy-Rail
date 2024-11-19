@@ -507,6 +507,7 @@ function parseTrainData(data) {
 
 
 
+
 function displayTrains(trains) {
   const resultContainer = document.getElementById("train-results");
   resultContainer.innerHTML = ""; // Clear previous results
@@ -520,10 +521,17 @@ function displayTrains(trains) {
     const trainItem = document.createElement("div");
     trainItem.classList.add("train-item");
 
+    // Convert running days binary to weekday string
+    const weekdays = ["M", "T", "W", "T", "F", "S" , "S"];
+    const runningDaysFormatted = train.running_days
+      .split("")
+      .map((bit, index) => (bit === "1" ? weekdays[index] : `<span class="inactive">${weekdays[index]}</span>`))
+      .join(" ");
+
     trainItem.innerHTML = `
       <div class="train-header">
         <h2>${train.train_name} (${train.train_no})</h2>
-        <span>Runs on: ${train.running_days}</span>
+        <span class="running-days">Runs on: ${runningDaysFormatted}</span>
       </div>
       <div class="train-body">
         <div>
