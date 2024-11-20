@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (currentPage === linkHref || linkHref === "#") {
       link.parentElement.classList.add("active-box");
-      
+
     } else {
       link.parentElement.classList.remove("active-box");
     }
@@ -64,6 +64,11 @@ async function fetchTrainDetails() {
       trainTableBody.innerHTML = "";
       document.getElementById("train-details").style.padding = "10px";
       document.getElementById("train-details").style.border = "2px solid black";
+      const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const runningDaysFormatted = data.running_days
+        .split("")
+        .map((bit, index) => (bit === "1" ? `${weekdays[index]}`: "_"))
+        .join(" ");
 
 
 
@@ -75,7 +80,7 @@ async function fetchTrainDetails() {
         { field: "Departure", value: data.from_time },
         { field: "Arrival", value: data.to_time },
         { field: "Travel Time", value: data.travel_time },
-        { field: "Running Days", value: data.running_days },
+        { field: "Running Days", value: `${runningDaysFormatted}`},
         { field: "Train ID", value: data.train_id }
       ];
 
@@ -555,7 +560,7 @@ function displayTrains(trains) {
       </div>
       <div class="train-footer">
         <span>${train.source_stn_name} ➡ ${train.dstn_stn_name}</span>
-        <a href="javascript:void(0)" class="timetable-link" id="timeTableLink" data-train-number="${train.train_no}">Time Table</a>
+        <a href="train-search.html" class="timetable-link" id="timeTableLink" data-train-number="${train.train_no}">Time Table</a>
       </div>
     `;
 
@@ -568,7 +573,6 @@ function displayTrains(trains) {
         const trainNumber = link.dataset.trainNumber; // Access train number from the data attribute
         console.log(trainNumber);
         sessionStorage.setItem("selectedTrainNumber", trainNumber);
-        window.location.href = "train-search.html";
 
       });
     });
