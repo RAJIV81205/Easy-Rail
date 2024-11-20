@@ -46,26 +46,26 @@
 
     <div class="container">
         <div class="main-box">
-            <h1>Book Ticket</h1>
+            <h1>All Train List</h1>
             <div class="input-bag">
                 <div class="input-contain">
                     <div class="input-box">
                         <label for="From">From</label>
-                        <input type="text" id="from" placeholder="New Delhi" oninput="searchStationFrom()">
+                        <input type="text" id="from" placeholder="&#8680 New Delhi" oninput="searchStationFrom()">
                         <div class="suggestions-from" id="suggestions-from"></div>
                     </div>
                     <img src="https://i.ibb.co/9gQFzhG/change.png">
                     </lord-icon>
                     <div class="input-box">
                         <label for="To">To</label>
-                        <input type="text" id="to" placeholder="Mumbai" oninput="searchStationTo()">
+                        <input type="text" id="to" placeholder="&#8680 Mumbai" oninput="searchStationTo()">
                         <div class="suggestions-to" id="suggestions-to"></div>
                     </div>
                 </div>
                 <div class="input-contain">
                     <div class="input-box">
                         <label for="class">Class</label>
-                        <select name="class" id="class">
+                        <select name="class" id="class" disabled>
                             <option value="All Classes">All Classes</option>
                             <option value="2S">2S</option>
                             <option value="Sleeper">Sleeper</option>
@@ -77,14 +77,14 @@
                     </div>
                     <div class="input-box">
                         <label for="date" >Journey Date</label>
-                        <input type="date" value="2024-11-15">
+                        <input type="date" value="2024-11-15" disabled>
                     </div>
 
                 </div>
                 <div class="input-contain">
                     <div class="input-box">
                         <label for="Quota">Quota</label>
-                        <select name="quota" id="quota">
+                        <select name="quota" id="quota" disabled>
                             <option value="GENERAL">GENERAL</option>
                             <option value="TATKAL">TATKAL</option>
                             <option value="PREMIUM-TATKAL">PREMIUM TATKAL</option>
