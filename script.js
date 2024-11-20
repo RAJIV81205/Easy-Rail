@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
+  fetchTrainDetails();
+  sessionStorage.clear()
 
   navLinks.forEach(link => {
     const linkText = link.textContent.trim();
@@ -10,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (currentPage === linkHref || linkHref === "#") {
       link.parentElement.classList.add("active-box");
+      
     } else {
       link.parentElement.classList.remove("active-box");
     }
@@ -29,7 +32,7 @@ hamburger.addEventListener('click', () => {
 
 
 async function fetchTrainDetails() {
-  const trainNumber = document.getElementById("train-number").value.trim();
+  const trainNumber = document.getElementById("train-number").value.trim() || sessionStorage.getItem("selectedTrainNumber");
   const trainTable = document.getElementById("train-table");
   const trainTableBody = document.getElementById("train-table-body");
   const trainScheduleBody = document.getElementById('train-schedule');
@@ -39,7 +42,7 @@ async function fetchTrainDetails() {
 
   trainTable.style.display = "none";
 
-  if (!trainNumber) {
+  if (trainNumber.length != 5) {
     alert("Please enter a valid train number!");
     return;
   }
@@ -59,8 +62,8 @@ async function fetchTrainDetails() {
 
 
       trainTableBody.innerHTML = "";
-      document.getElementById("train-details").style.padding="10px";
-      document.getElementById("train-details").style.border="2px solid black";
+      document.getElementById("train-details").style.padding = "10px";
+      document.getElementById("train-details").style.border = "2px solid black";
 
 
 
@@ -552,10 +555,30 @@ function displayTrains(trains) {
       </div>
       <div class="train-footer">
         <span>${train.source_stn_name} ➡ ${train.dstn_stn_name}</span>
-        <a href="#" class="timetable-link">Time Table</a>
+        <a href="javascript:void(0)" class="timetable-link" id="timeTableLink" data-train-number="${train.train_no}">Time Table</a>
       </div>
     `;
 
     resultContainer.appendChild(trainItem);
+
+    const timeTableLinks = document.querySelectorAll(".timetable-link");
+
+    timeTableLinks.forEach(link => {
+      link.addEventListener("click", function () {
+        const trainNumber = link.dataset.trainNumber; // Access train number from the data attribute
+        console.log(trainNumber);
+        sessionStorage.setItem("selectedTrainNumber", trainNumber);
+        window.location.href = "train-search.html";
+
+      });
+    });
+
+
   });
 }
+
+
+
+
+
+
