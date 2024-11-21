@@ -295,10 +295,19 @@ button {
     width: 150px;
     height: 40px;
     border-radius: 20px;
-    border: 2px solid whitesmoke;
-    background-color: #0A043C;
-    color: #A1D6E2;
+    border: 2px solid rgb(0, 0, 0);
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 1rem;
     cursor: pointer;
+    transition: scale 0.3s ,background-color 0.3s,font-size 0.3s;
+
+}
+
+button:hover{
+    background-color: #01ffd5;
+    font-size: 1.1rem;
+    scale: 1.1;
 
 }
 
