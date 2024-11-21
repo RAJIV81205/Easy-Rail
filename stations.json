@@ -20047,6 +20047,11 @@
           "stnCity":"Sirathu"
        },
        {
+         "stnCode":"SMVT",
+         "stnName":"SMVT Bengaluru",
+         "stnCity":"Bangalore"
+      },
+       {
           "stnCode":"SIRD",
           "stnName":"Sird",
           "stnCity":"Sird"
@@ -22946,11 +22951,7 @@
           "stnName":"Yerraguntla",
           "stnCity":"Yerraguntla"
        },
-       {
-          "stnCode":"YPR",
-          "stnName":"Yesvantpur Junction",
-          "stnCity":"Bangalore"
-       },
+      
        {
           "stnCode":"YT",
           "stnName":"Yevat",
