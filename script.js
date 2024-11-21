@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
   fetchTrainDetails();
-  sessionStorage.clear()
+  sessionStorage.removeItem("selectedTrainNumber");
 
   navLinks.forEach(link => {
     const linkText = link.textContent.trim();
@@ -384,6 +384,14 @@ function filterStationTo(input) {
 
 
 
+function getDayIndex(dateString) {
+  const date = new Date(dateString);
+  const jsDayIndex = date.getDay(); // JS day index (0 = Sunday, 6 = Saturday)
+
+  // Adjust for Monday as the first day
+  return (jsDayIndex + 6) % 7;
+}
+
 
 
 
@@ -391,6 +399,8 @@ function filterStationTo(input) {
 document.getElementById("main-search").addEventListener("click", function () {
   const from = sessionStorage.getItem("from").toLowerCase().trim();
   const to = sessionStorage.getItem("to").toLowerCase().trim();
+
+
 
   // Check if both input fields have values
   if (!from || !to) {
@@ -521,6 +531,25 @@ function displayTrains(trains) {
   const from = sessionStorage.getItem("from").trim();
   const to = sessionStorage.getItem("to").trim();
 
+  var selectedDate = document.getElementById("date").value;
+  
+  const selectedDayIndex = getDayIndex(selectedDate); // Get the day index (0 = Monday)
+  var selectedDate = new Date(selectedDate).toLocaleDateString();
+
+
+  let currentDate = new Date().toLocaleDateString();;
+  
+
+
+
+  if (selectedDate<currentDate){
+    alert("Please input right date")
+    return;
+  }
+
+  console.log(currentDate)
+  console.log(selectedDate)
+
   if (trains.length === 0) {
     resultContainer.innerHTML = "<p>No trains found for the selected route.</p>";
     return;
@@ -528,9 +557,11 @@ function displayTrains(trains) {
 
   resultContainer.innerHTML = `<h1>List of Trains from ${from} to ${to}.</h1>`;
   trains.forEach(train => {
+    // Filter trains by running days
+    if (train.running_days[selectedDayIndex] !== "1") return; // Skip if train doesn't run today
+
     const trainItem = document.createElement("div");
     trainItem.classList.add("train-item");
-
 
     const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
     const runningDaysFormatted = train.running_days
