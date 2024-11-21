@@ -4581,6 +4581,11 @@
           "stnCity":"Chhatna"
        },
        {
+         "stnCode":"CSMT",
+         "stnName":"Chhatrapati Shivaji Maharaj Terminus",
+         "stnCity":"Mumbai"
+      },
+       {
           "stnCode":"CHN",
           "stnName":"Chhina",
           "stnCity":"Chhina"
@@ -14450,11 +14455,7 @@
           "stnName":"Mumbai Central",
           "stnCity":"Mumbai"
        },
-       {
-          "stnCode":"CSMT",
-          "stnName":"Chhatrapati Shivaji Maharaj Terminus",
-          "stnCity":"Mumbai"
-       },
+       
        {
           "stnCode":"MBF",
           "stnName":"Munabao",
