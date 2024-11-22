@@ -489,7 +489,7 @@ tr:nth-child(even) {
 
 .train-item {
     border: 1px solid #000000;
-    box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.384);
+    box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.385);
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
