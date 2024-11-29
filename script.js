@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
-  var current = new Date().toLocaleDateString()
-  current= current.split("/")
-  document.getElementById("date").value= current[2]+"-"+current[1]+"-"+current[0];
   fetchTrainDetails();
   sessionStorage.removeItem("selectedTrainNumber");
 
@@ -20,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
       link.parentElement.classList.remove("active-box");
     }
   });
+  var current = new Date().toLocaleDateString()
+  current= current.split("/")
+  document.getElementById("date").value= current[2]+"-"+current[1]+"-"+current[0];
 });
 
 
