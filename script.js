@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
+  var current = new Date().toLocaleDateString()
+  current= current.split("/")
+  document.getElementById("date").value= current[2]+"-"+current[1]+"-"+current[0];
   fetchTrainDetails();
   sessionStorage.removeItem("selectedTrainNumber");
 
@@ -67,7 +70,7 @@ async function fetchTrainDetails() {
       const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       const runningDaysFormatted = data.running_days
         .split("")
-        .map((bit, index) => (bit === "1" ? `${weekdays[index]}`: "_"))
+        .map((bit, index) => (bit === "1" ? `${weekdays[index]}` : "_"))
         .join(" ");
 
 
@@ -80,7 +83,7 @@ async function fetchTrainDetails() {
         { field: "Departure", value: data.from_time },
         { field: "Arrival", value: data.to_time },
         { field: "Travel Time", value: data.travel_time },
-        { field: "Running Days", value: `${runningDaysFormatted}`},
+        { field: "Running Days", value: `${runningDaysFormatted}` },
         { field: "Train ID", value: data.train_id }
       ];
 
@@ -501,6 +504,14 @@ function parseTrainData(data) {
         }
       }
     }
+    arr.sort((a, b) => {
+      const timeA = a.from_time.split(":").map(Number);
+      const timeB = b.from_time.split(":").map(Number);
+      const minutesA = timeA[0] * 60 + timeA[1];
+      const minutesB = timeB[0] * 60 + timeB[1];
+      return minutesA - minutesB;
+    });
+    
 
     return {
       success: true,
@@ -530,30 +541,20 @@ function displayTrains(trains) {
   resultContainer.innerHTML = "";
   const from = sessionStorage.getItem("from").trim();
   const to = sessionStorage.getItem("to").trim();
+  document.getElementById("from").value="";
+  document.getElementById("to").value="";
 
-  var selectedDate = document.getElementById("date").value;
-  
+
+  const selectedDate = document.getElementById("date").value;
+
   const selectedDayIndex = getDayIndex(selectedDate); // Get the day index (0 = Monday)
-  var selectedDate = new Date(selectedDate).toLocaleDateString();
 
-
-  let currentDate = new Date().toLocaleDateString();;
-  
-
-
-
-  if (selectedDate<currentDate){
-    alert("Please input right date")
-    return;
-  }
-
-  console.log(currentDate)
-  console.log(selectedDate)
 
   if (trains.length === 0) {
     resultContainer.innerHTML = "<p>No trains found for the selected route.</p>";
     return;
   }
+
 
   resultContainer.innerHTML = `<h1>List of Trains from ${from} to ${to}.</h1>`;
   trains.forEach(train => {
@@ -596,6 +597,7 @@ function displayTrains(trains) {
     `;
 
     resultContainer.appendChild(trainItem);
+    resultContainer.scrollIntoView();
 
     const timeTableLinks = document.querySelectorAll(".timetable-link");
 
