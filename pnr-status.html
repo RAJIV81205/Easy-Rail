@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PNR Status</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="logo">
@@ -39,7 +41,18 @@
             <img src="https://i.ibb.co/j4hffQ3/user.png" alt="User">
         </div>
     </header>
+    <h1 class="heading">PNR Enquiry</h1>
+    <div class="search-container">
+
+        <input type="text" id="pnr-number" placeholder="Enter PNR Number" />
+        <button onclick="fetchPnrDetails()">Search</button>
+
+    </div>
+    <div id="output"></div>
+
+
 
     <script src="script.js"></script>
 </body>
+
 </html>
