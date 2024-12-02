@@ -753,7 +753,7 @@ async function getStatus() {
   console.log("Date:", dates);
 
   try {
-    const response = await fetch('https://easy-rail.netlify.app/fetch-train-status', {
+    const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ trainNumber, dates }),
