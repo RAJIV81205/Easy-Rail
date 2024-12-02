@@ -4,22 +4,26 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchTrainDetails();
   sessionStorage.removeItem("selectedTrainNumber");
 
+
+
   navLinks.forEach(link => {
     const linkText = link.textContent.trim();
     const linkHref = link.getAttribute("href");
 
-
-
     if (currentPage === linkHref || linkHref === "#") {
       link.parentElement.classList.add("active-box");
+
 
     } else {
       link.parentElement.classList.remove("active-box");
     }
   });
+
   var current = new Date().toLocaleDateString()
-  current= current.split("/")
-  document.getElementById("date").value= current[2]+"-"+current[1]+"-"+current[0];
+  current = current.split("/")
+  const newcurrent = current[2] + "-" + current[1] + "-" + current[0];
+  document.getElementById("date").value = newcurrent;
+
 });
 
 
@@ -511,7 +515,7 @@ function parseTrainData(data) {
       const minutesB = timeB[0] * 60 + timeB[1];
       return minutesA - minutesB;
     });
-    
+
 
     return {
       success: true,
@@ -541,8 +545,8 @@ function displayTrains(trains) {
   resultContainer.innerHTML = "";
   const from = sessionStorage.getItem("from").trim();
   const to = sessionStorage.getItem("to").trim();
-  document.getElementById("from").value="";
-  document.getElementById("to").value="";
+  document.getElementById("from").value = "";
+  document.getElementById("to").value = "";
 
 
   const selectedDate = document.getElementById("date").value;
@@ -614,10 +618,9 @@ function displayTrains(trains) {
   });
 }
 
-
-function fetchPnrDetails(){
+function fetchPnrDetails() {
   const pnr = document.getElementById("pnr-number").value;
-  if (pnr.length!=10){
+  if (pnr.length != 10) {
     alert("Invalid PNR Number");
     return;
   }
@@ -738,3 +741,88 @@ function showPNRdetails(data) {
 
 
 
+
+
+async function getStatus() {
+  console.log("Form submitted");
+
+  const trainNumber = document.getElementById('trainNumber').value;
+  const dates = document.getElementById('dates').value;
+
+  console.log("Train Number:", trainNumber);
+  console.log("Date:", dates);
+
+  try {
+    const response = await fetch('http://localhost:8000/fetch-train-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trainNumber, dates }),
+    });
+
+    const data = await response.json();
+    console.log("Response from backend:", data);
+
+    if (response.ok) {
+      renderTrainTable(data)
+    } else {
+      document.getElementById('output1').textContent = `Error: ${data.error}`;
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    document.getElementById('output1').textContent = `Error: ${error.message}`;
+  }
+}
+
+
+function renderTrainTable(data) {
+  const container = document.getElementById('trainStatusContainer');
+
+  // Create the table element
+  let table = `
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Station</th>
+          <th>Est. Arrival</th>
+          <th>Est. Departure</th>
+          <th>Delay</th>
+          <th>Status</th>
+          <th>Current Station</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  // Iterate over data and add rows with conditional styling
+  data.forEach((item) => {
+    // Check if the row corresponds to the current station
+    const rowStyle = item.current === "true"
+      ? 'background-color: #A1D6E2; color: #000000 ; font-weight: bold;'
+      : item.status === "crossed"
+        ? 'background-color: #e6e6e6 ; color: black;'
+        : 'background-color: #c2f5ba ; color: black;';
+
+
+    // Add the row
+    table += `
+      <tr style="${rowStyle}">
+        <td>${item.index}</td>
+        <td>${item.station}</td>
+        <td>${item.arr || "N/A"}</td>
+        <td>${item.dep || "N/A"}</td>
+        <td>${item.delay || "On Time"}</td>
+        <td>${item.status === "crossed" ? "Crossed" : "Upcoming"}</td>
+        <td>${item.current === "true" ? "&#128645" : ""}</td>
+      </tr>
+    `;
+  });
+
+  table += `
+      </tbody>
+    </table>
+  `;
+
+  // Render the table in the container
+  container.innerHTML = table;
+}
