@@ -449,7 +449,7 @@ td {
     font-family: "Ubuntu", sans-serif;
     font-weight: 500;
     font-style: normal;
-    font-size: 1.1rem;
+
 }
 
 th {
@@ -489,7 +489,7 @@ tr:nth-child(even) {
 
 .train-item {
     border: 1px solid #000000;
-    box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.385);
+    box-shadow: 3px 3px 6px rgba(128, 128, 128, 0.384);
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
@@ -567,4 +567,21 @@ tr:nth-child(even) {
 
 .train-footer .timetable-link:hover {
     text-decoration: underline;
+}
+
+
+#trainForm{
+    margin-top: 30px;
+    display: flex;
+    width: 80%;
+    height: 30vh;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#trainStatusContainer{
+    width: 1000px;
+    max-width: 98%;
+
 }
