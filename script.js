@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPage = window.location.pathname;
+  const currentPage = window.location.pathname.split("/").pop() || window.location.pathname;
   const navLinks = document.querySelectorAll(".navbar .box a");
   fetchTrainDetails();
   sessionStorage.removeItem("selectedTrainNumber");
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     } else {
-      link.parentElement.classList.remove("active-box");
+      link.parentElement.classList.remove("active-box" );
     }
   });
 
@@ -744,16 +744,23 @@ function showPNRdetails(data) {
 
 
 async function getStatus() {
+  
   console.log("Form submitted");
 
   const trainNumber = document.getElementById('trainNumber').value;
+
+  if (trainNumber.length!=5){
+    alert("WRONG TRAIN NUMBER")
+    return
+  }
+  document.getElementById("output1").innerText = "Fetching Train Details........🔍"
   const dates = document.getElementById('dates').value;
 
   console.log("Train Number:", trainNumber);
   console.log("Date:", dates);
 
   try {
-    const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
+    const response = await fetch('http://easy-rail.onrender.com/fetch-train-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ trainNumber, dates }),
@@ -775,6 +782,7 @@ async function getStatus() {
 
 
 function renderTrainTable(data) {
+  document.getElementById("output1").innerText = ""
   const container = document.getElementById('trainStatusContainer');
 
   // Create the table element
