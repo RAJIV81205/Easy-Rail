@@ -35,7 +35,7 @@ app.post('/fetch-train-status', async (req, res) => {
     return res.status(400).json({ error: "Train number and date are required" });
   }
 
-  const url = `${process.env.URL}${trainNumber}?&Date=${dates}`;
+  const url = `${process.env.URI}${trainNumber}?&Date=${dates}`;
 
   try {
     const response = await axios.get(url);
