@@ -46,16 +46,37 @@
     <h1>Train Running Status</h1>
     <form id="trainForm">
         <label for="trainNumber">Train Number:</label>
-        <input type="text" id="trainNumber" name="trainNumber"  placeholder="Enter Train No." required/>
+        <input type="text" id="trainNumber" name="trainNumber" placeholder="Enter Train No." required />
         <label for="date">Starting Date:</label>
-        <input type="date" id="dates" name="date"  />
+        <input type="date" id="dates" name="date" />
         <button type="button" onclick="getStatus()">Check Status</button>
     </form>
-    <pre id="output1"></pre>
+    <div class="loader" id="train-loader"></div>
+    <pre id="output1">
+
+    </pre>
     <div id="trainStatusContainer">
         <!-- The table will be generated here -->
-      </div>
-      
+    </div>
+
+
+    <!--<div class="station">
+        <div class="line">
+            <div class="circle"></div>
+        </div>
+        <div class="details">
+            <h2>KALKA</h2>
+            <div class="timings">
+                <p>Est. Arrival: 12:00 PM</p>
+                <p>Est. Departure :01:00 PM </p>
+            </div>
+            <div class="delay">
+                <p>Delay: 1hr 32min</p>
+            </div>
+        </div>
+
+
+    </div>-->
 
     <script src="script.js"></script>
 
