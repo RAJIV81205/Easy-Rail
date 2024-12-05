@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dekko&family=Lemonada:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Dekko&family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Lemonada:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 * {
     margin: 0;
@@ -300,11 +296,11 @@ button {
     color: #000000;
     font-size: 1rem;
     cursor: pointer;
-    transition: scale 0.3s ,background-color 0.3s,font-size 0.3s;
+    transition: scale 0.3s, background-color 0.3s, font-size 0.3s;
 
 }
 
-button:hover{
+button:hover {
     background-color: #01ffd5;
     font-size: 1.1rem;
     scale: 1.1;
@@ -504,7 +500,7 @@ tr:nth-child(even) {
 
 }
 
-.train-item:nth-of-type(even){
+.train-item:nth-of-type(even) {
     background-color: #ddf7f3;
 }
 
@@ -570,7 +566,7 @@ tr:nth-child(even) {
 }
 
 
-#trainForm{
+#trainForm {
     margin-top: 30px;
     display: flex;
     width: 80%;
@@ -580,8 +576,133 @@ tr:nth-child(even) {
     justify-content: space-between;
 }
 
-#trainStatusContainer{
+#trainStatusContainer {
     width: 1000px;
     max-width: 98%;
+    font-family: Arial, sans-serif;
 
+}
+
+#output1 {
+    margin-top: 25px;
+}
+
+
+.loader {
+    display: none;
+    width: 120px;
+    height: 20px;
+    -webkit-mask: radial-gradient(circle closest-side, #000000 94%, #0000) left/20% 100%;
+    background: linear-gradient(#000000 0 0) left/0% 100% no-repeat #ddd;
+    animation: l17 1.5s infinite steps(6);
+}
+
+@keyframes l17 {
+    100% {
+        background-size: 120% 100%
+    }
+}
+
+
+.station {
+    width: 90%;
+    max-width: 600px;
+    height: 150px;
+    background-color: rgba(213, 210, 210, 0.438);
+    border-radius: 10px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    margin: 10px auto;
+    transition: background-color 0.3s ease;
+}
+
+.station.crossed {
+    background-color: #f0f0f0;
+}
+
+.station.current {
+    background-color: #A1D6E2;
+}
+
+.station.upcoming {
+    background-color: #c2f5ba;
+}
+
+.line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 90px;
+    width: 15px;
+    height: 100%;
+    border-radius: 5px;
+    background-color: rgba(88, 88, 88, 0.29);
+    position: relative;
+}
+
+.circle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle img {
+    width: 24px;
+    height: 24px;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    font-family: "Outfit", sans-serif;
+}
+
+.timings {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.delay p {
+    color: red;
+}
+
+
+.timings span{
+    color: rgb(231, 104, 104);
+}
+
+.details h2{
+    letter-spacing:1.5px;
+    word-spacing: 5px;
+}
+
+@media screen and (max-width:550px){
+    .line{
+        margin-left: 30px;
+    }
+
+    .timings{
+        font-size: 12px;
+    }
+
+    .details h2{
+        font-size: 1.1rem;
+    }
+
+    .delay p {
+        font-size: 14px;
+    }
 }
