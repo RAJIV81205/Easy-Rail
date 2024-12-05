@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPage = window.location.pathname.split("/").pop() || window.location.pathname;
+  const currentPage = window.location.pathname.split("/").pop();
   const navLinks = document.querySelectorAll(".navbar .box a");
   fetchTrainDetails();
   sessionStorage.removeItem("selectedTrainNumber");
@@ -15,14 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     } else {
-      link.parentElement.classList.remove("active-box" );
+      link.parentElement.classList.remove("active-box");
     }
   });
 
   var current = new Date().toLocaleDateString()
   current = current.split("/")
-  const newcurrent = current[2] + "-" + current[1] + "-" + current[0];
-  document.getElementById("date").value = newcurrent;
+  document.getElementById("date").value = current[2] + "-" + current[1] + "-" + current[0];
 
 });
 
@@ -743,94 +742,110 @@ function showPNRdetails(data) {
 
 
 
+let autoRefreshInterval; // Declare at the top, before using it anywhere
+
 async function getStatus() {
-  
-  console.log("Form submitted");
+    const container = document.getElementById('trainStatusContainer');
+    container.innerHTML = ''; // Clear any existing content
 
-  const trainNumber = document.getElementById('trainNumber').value;
+    console.log("Form submitted");
 
-  if (trainNumber.length!=5){
-    alert("WRONG TRAIN NUMBER")
-    return
-  }
-  document.getElementById("output1").innerText = "Fetching Train Details........🔍"
-  const dates = document.getElementById('dates').value;
+    const trainNumber = document.getElementById('trainNumber').value;
 
-  console.log("Train Number:", trainNumber);
-  console.log("Date:", dates);
-
-  try {
-    const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trainNumber, dates }),
-    });
-
-    const data = await response.json();
-    console.log("Response from backend:", data);
-
-    if (response.ok) {
-      renderTrainTable(data)
-    } else {
-      document.getElementById('output1').textContent = `Error: ${data.error}`;
+    if (trainNumber.length !== 5) {
+        alert("WRONG TRAIN NUMBER");
+        return;
     }
-  } catch (error) {
-    console.error("Error:", error.message);
-    document.getElementById('output1').textContent = `Error: ${error.message}`;
-  }
+
+    document.getElementById("train-loader").style.display = "flex";
+    document.getElementById("output1").innerText = "Fetching Train Details........🔍";
+    const dates = document.getElementById('dates').value;
+
+    console.log("Train Number:", trainNumber);
+    console.log("Date:", dates);
+
+    try {
+        const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ trainNumber, dates }),
+        });
+
+        const data = await response.json();
+        console.log("Response from backend:", data);
+
+        if (response.ok) {
+            renderStationCards(data);
+            setInterval(() => {
+              console.log("Auto-refreshing data...");
+              getStatus(); // Recursive call to fetch updated data
+          }, 60000); // 30 seconds interval
+
+            // Clear any existing interval to avoid duplicate calls
+            
+        } else {
+            document.getElementById('output1').textContent = `Error: ${data.error}`;
+        }
+    } catch (error) {
+        console.error("Error:", error.message);
+        document.getElementById("train-loader").style.display = "none";
+        document.getElementById('output1').textContent = `Error: ${error.message}`;
+    }
 }
 
-
-function renderTrainTable(data) {
-  document.getElementById("output1").innerText = ""
+function renderStationCards(data) {
   const container = document.getElementById('trainStatusContainer');
 
-  // Create the table element
-  let table = `
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Index</th>
-          <th>Station</th>
-          <th>Est. Arrival</th>
-          <th>Est. Departure</th>
-          <th>Delay</th>
-          <th>Status</th>
-          <th>Current Station</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  document.getElementById("train-loader").style.display = "none";
+    document.getElementById("output1").innerText = "";
 
-  // Iterate over data and add rows with conditional styling
-  data.forEach((item) => {
-    // Check if the row corresponds to the current station
-    const rowStyle = item.current === "true"
-      ? 'background-color: #A1D6E2; color: #000000 ; font-weight: bold;'
-      : item.status === "crossed"
-        ? 'background-color: #e6e6e6 ; color: black;'
-        : 'background-color: #c2f5ba ; color: black;';
+    data.forEach((station) => {
+        // Create the card element
+        const stationCard = document.createElement('div');
+        stationCard.className = 'station';
 
+        // Set station card background based on status
+        if (station.current === "true") {
+            stationCard.style.backgroundColor = '#A1D6E2';
+        } else if (station.status === "crossed") {
+            stationCard.style.backgroundColor = '#e6e6e6';
+        } else {
+            stationCard.style.backgroundColor = '#c2f5ba';
+        }
 
-    // Add the row
-    table += `
-      <tr style="${rowStyle}">
-        <td>${item.index}</td>
-        <td>${item.station}</td>
-        <td>${item.arr || "N/A"}</td>
-        <td>${item.dep || "N/A"}</td>
-        <td>${item.delay || "On Time"}</td>
-        <td>${item.status === "crossed" ? "Crossed" : "Upcoming"}</td>
-        <td>${item.current === "true" ? "&#128645" : ""}</td>
-      </tr>
-    `;
-  });
+        // Add the card's inner HTML
+        stationCard.innerHTML = `
+            <div class="line">
+                <img class="circle" src="${
+                    station.current === "true"
+                        ? "https://i.postimg.cc/SKNfYCLn/train.png"
+                        : station.status === "crossed"
+                        ? "https://i.postimg.cc/7651m4WD/healthy.png"
+                        : "https://i.postimg.cc/g0SqVj4N/next-week.png"
+                }" alt="status" />
+            </div>
+            <div class="details">
+                <h2>${station.station}</h2>
+                <div class="timings">
+                    <p>Est. Arrival: <span>${station.arr || "N/A"}</span></p>
+                    <p>Est. Departure: <span>${station.dep || "N/A"}</span></p>
+                </div>
+                <div class="delay">
+                    <p>${station.delay ? `Delay: ${station.delay}` : "On Time"}</p>
+                </div>
+            </div>
+        `;
 
-  table += `
-      </tbody>
-    </table>
-  `;
+        // Change delay color based on status
+        const delayElement = stationCard.querySelector('.delay p');
+        if (station.delay === "") {
+            delayElement.style.color = "green";
+        } else {
+            delayElement.style.color = "red";
+        }
 
-  // Render the table in the container
-  container.innerHTML = table;
+        // Append the card to the container
+        container.appendChild(stationCard);
+    });
+
 }
