@@ -1,23 +1,21 @@
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const path = require('path')
 const cors = require('cors'); // Import cors
 require('dotenv').config()
 
 const app = express();
-app.use(express.static(path.join(__dirname)));
 const PORT = process.env.PORT;
 
 // Enable CORS
 app.use(cors());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = [`http://localhost:${PORT}`, 'https://easy-rail.onrender.com','https://easy-rail.netlify.app'];
+  const allowedOrigins = [`http://localhost:${PORT}`, 'https://easy-rail.onrender.com', 'https://easy-rail.netlify.app'];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
-       res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-credentials", true);
@@ -48,15 +46,22 @@ app.post('/fetch-train-status', async (req, res) => {
       const station = $(element).find('.rs__station-name.ellipsis').text().trim();
       const arr = $(element).find('.col-xs-2:first span').text().trim();
       var dep = $(element).find('.col-xs-2 span').text().trim();
-      const delay = $(element).find('.rs__station-delay').text().trim();
+      var delay = $(element).find('.rs__station-delay').text().trim();
       let status = $(element).find('div.circle-thin').length > 0 ? "upcoming" : "crossed";
       let current = $(element).find('.circle.blink').length > 0 ? "true" : "false";
 
-      if (dep.length>6){
-        dep = dep.slice(5,10);
+      if (delay.length>10){
+        delay = delay.slice(9)
       }
       else{
-        dep =dep
+        delay = "";
+      }
+
+      if (dep.length > 6) {
+        dep = dep.slice(5, 10);
+      }
+      else {
+        dep = dep
       }
 
       elementsData.push({
@@ -79,3 +84,5 @@ app.post('/fetch-train-status', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
