@@ -843,6 +843,7 @@ function renderStationCards(data) {
     const delayElement = stationCard.querySelector('.delay p');
     if (station.delay === "") {
       delayElement.style.color = "green";
+      stationCard.querySelector("span").style.color = "green";
     } else {
       delayElement.style.color = "red";
     }
