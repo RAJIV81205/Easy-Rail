@@ -606,7 +606,7 @@ function displayTrains(trains) {
 
     timeTableLinks.forEach(link => {
       link.addEventListener("click", function () {
-        const trainNumber = link.dataset.trainNumber; // Access train number from the data attribute
+        const trainNumber = link.dataset.trainNumber; 
         console.log(trainNumber);
         sessionStorage.setItem("selectedTrainNumber", trainNumber);
 
@@ -742,11 +742,10 @@ function showPNRdetails(data) {
 
 
 
-let autoRefreshInterval; // Declare at the top, before using it anywhere
 
 async function getStatus() {
     const container = document.getElementById('trainStatusContainer');
-    container.innerHTML = ''; // Clear any existing content
+    container.innerHTML = ''; 
 
     console.log("Form submitted");
 
@@ -778,10 +777,10 @@ async function getStatus() {
             renderStationCards(data);
             setInterval(() => {
               console.log("Auto-refreshing data...");
-              getStatus(); // Recursive call to fetch updated data
-          }, 60000); // 30 seconds interval
+              getStatus(); 
+          }, 60000); 
 
-            // Clear any existing interval to avoid duplicate calls
+            
             
         } else {
             document.getElementById('output1').textContent = `Error: ${data.error}`;
@@ -795,57 +794,68 @@ async function getStatus() {
 
 function renderStationCards(data) {
   const container = document.getElementById('trainStatusContainer');
+  container.innerHTML = ""; 
 
   document.getElementById("train-loader").style.display = "none";
-    document.getElementById("output1").innerText = "";
+  document.getElementById("output1").innerText = "";
 
-    data.forEach((station) => {
-        // Create the card element
-        const stationCard = document.createElement('div');
-        stationCard.className = 'station';
+  let currentStationElement = null; 
 
-        // Set station card background based on status
-        if (station.current === "true") {
-            stationCard.style.backgroundColor = '#A1D6E2';
-        } else if (station.status === "crossed") {
-            stationCard.style.backgroundColor = '#e6e6e6';
-        } else {
-            stationCard.style.backgroundColor = '#c2f5ba';
-        }
+  data.forEach((station) => {
+    
+    const stationCard = document.createElement('div');
+    stationCard.className = 'station';
 
-        // Add the card's inner HTML
-        stationCard.innerHTML = `
-            <div class="line">
-                <img class="circle" src="${
-                    station.current === "true"
-                        ? "https://i.postimg.cc/SKNfYCLn/train.png"
-                        : station.status === "crossed"
-                        ? "https://i.postimg.cc/7651m4WD/healthy.png"
-                        : "https://i.postimg.cc/g0SqVj4N/next-week.png"
-                }" alt="status" />
-            </div>
-            <div class="details">
-                <h2>${station.station}</h2>
-                <div class="timings">
-                    <p>Est. Arrival: <span>${station.arr || "N/A"}</span></p>
-                    <p>Est. Departure: <span>${station.dep || "N/A"}</span></p>
-                </div>
-                <div class="delay">
-                    <p>${station.delay ? `Delay: ${station.delay}` : "On Time"}</p>
-                </div>
-            </div>
-        `;
+   
+    if (station.current === "true") {
+      stationCard.style.backgroundColor = '#A1D6E2';
+      currentStationElement = stationCard; 
+    } else if (station.status === "crossed") {
+      stationCard.style.backgroundColor = '#e6e6e6';
+    } else {
+      stationCard.style.backgroundColor = '#c2f5ba';
+    }
 
-        // Change delay color based on status
-        const delayElement = stationCard.querySelector('.delay p');
-        if (station.delay === "") {
-            delayElement.style.color = "green";
-        } else {
-            delayElement.style.color = "red";
-        }
+    
+    stationCard.innerHTML = `
+      <div class="line">
+        <img class="circle" src="${
+          station.current === "true"
+            ? "https://i.postimg.cc/SKNfYCLn/train.png"
+            : station.status === "crossed"
+            ? "https://i.postimg.cc/7651m4WD/healthy.png"
+            : "https://i.postimg.cc/g0SqVj4N/next-week.png"
+        }" alt="status" />
+      </div>
+      <div class="details">
+        <h2>${station.station}</h2>
+        <div class="timings">
+          <p>Est. Arrival: <span>${station.arr || "N/A"}</span></p>
+          <p>Est. Departure: <span>${station.dep || "N/A"}</span></p>
+        </div>
+        <div class="delay">
+          <p>${station.delay ? `Delay: ${station.delay}` : "On Time"}</p>
+        </div>
+      </div>
+    `;
 
-        // Append the card to the container
-        container.appendChild(stationCard);
+    // Change delay color based on status
+    const delayElement = stationCard.querySelector('.delay p');
+    if (station.delay === "") {
+      delayElement.style.color = "green";
+    } else {
+      delayElement.style.color = "red";
+    }
+
+    // Append the card to the container
+    container.appendChild(stationCard);
+  });
+
+  
+  if (currentStationElement) {
+    currentStationElement.scrollIntoView({
+      behavior: "smooth",
+      block: "center",    
     });
-
+  }
 }
