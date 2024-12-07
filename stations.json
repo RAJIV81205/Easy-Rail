@@ -8296,6 +8296,12 @@
           "stnCity":"Helem"
        },
        {
+         "stnCode":"HMPR",
+         "stnName":"Hurmujpur Halt",
+         "stnCity":"Hurmujpur"
+      },
+
+       {
           "stnCode":"HGR",
           "stnName":"Hemagiri",
           "stnCity":"Hemagiri"
