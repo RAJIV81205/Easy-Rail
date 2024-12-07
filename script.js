@@ -773,12 +773,19 @@ async function getStatus() {
         const data = await response.json();
         console.log("Response from backend:", data);
 
-        if (response.ok) {
-            renderStationCards(data);
-            setInterval(() => {
-              console.log("Auto-refreshing data...");
-              getStatus(); 
-          }, 60000); 
+         if (response.ok) {
+            if (data.length != 0) {
+                renderStationCards(data);
+                setInterval(() => {
+                console.log("Auto-refreshing data...");
+                getStatus(); 
+
+              }, 60000);
+            }
+        else{
+        document.getElementById('output1').textContent = `No details found for train Number: ${trainNumber}`;
+        document.getElementById("train-loader").style.display = "none";
+      }
 
             
             
