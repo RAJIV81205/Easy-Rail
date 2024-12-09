@@ -46,10 +46,10 @@
     <h1>Train Running Status</h1>
     <form id="trainForm">
         <label for="trainNumber">Train Number:</label>
-        <input type="text" id="trainNumber" name="trainNumber" placeholder="Enter Train No." required />
+        <input type="text" id="trainNumber" name="trainNumber" placeholder="Ex: 12345" required />
         <label for="date">Starting Date:</label>
-        <input type="date" id="dates" name="date" />
-        <button type="button" onclick="getStatus()">Check Status</button>
+        <input type="date" id="dates" name="date"/>
+        <button type="button" onclick="getStatus()" >Check Status</button>
     </form>
     <div class="loader" id="train-loader"></div>
     <pre id="output1">
