@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Dekko&family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Lemonada:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
 * {
     margin: 0;
@@ -712,4 +713,68 @@ tr:nth-child(even) {
     .delay p {
         font-size: 14px;
     }
+
+    .train-det h3{
+        font-size: 0.6rem;
+    }
+
+    .train-det p{
+        font-size: 0.5rem;
+    }
+
+    .train-det h2{
+        font-size: 0.6rem;
+
+    }
+
+
 }
+
+.at-station-container{
+    margin-top: 20px;
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid blue;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    background-color: #dfefff;
+}
+.at-station-container label , .at-station-container input , .at-station-container button {
+    margin: 10px 0;
+}
+
+.at-station-container button{
+    width: fit-content;
+    padding: 10px 20px;
+}
+
+
+#trainStationContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.train-det{
+    margin-top: 20px;
+    padding: 10px 10px ;
+    width: 95%;
+    height: fit-content;
+    background-color: #A1D6E2;
+    border: 2px solid black;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
