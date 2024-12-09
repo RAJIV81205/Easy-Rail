@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const cors = require('cors'); // Import cors
+const path = require('path');
 require('dotenv').config()
 
 const app = express();
@@ -9,6 +10,7 @@ const PORT = process.env.PORT;
 
 // Enable CORS
 app.use(cors());
+app.use(express.static(path.join(__dirname)));
 
 app.use(function (req, res, next) {
   // res.header("Access-Control-Allow-Origin", "*");
