@@ -876,6 +876,7 @@ function renderStationCards(data) {
 
 
 async function searchStation(){
+document.getElementById('trainStationContainer').innerHTML="";
 const stnCode =  document.getElementById("at-station").value
 
 try {
