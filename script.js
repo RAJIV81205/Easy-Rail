@@ -904,7 +904,7 @@ function showStationLive(data){
 
         trainDiv.innerHTML = `
             <h3>${train.trainname} (${train.trainno})</h3>
-            <p>${train.source} -> ${train.dest}</p>
+            <p>${train.source} &#8594 ${train.dest}</p>
             <h2>${train.timeat}</h2>
         `;
 
