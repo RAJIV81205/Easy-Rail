@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train Search</title>
+    <title>Live Train Status</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.freepik.com/512/7995/7995412.png">
 </head>
@@ -43,42 +43,43 @@
         </div>
     </header>
 
-    <h1 class="heading">Train Timetable</h1>
-    <div class="search-container">
+    <h1>Train Running Status</h1>
+    <form id="trainForm">
+        <label for="trainNumber">Train Number:</label>
+        <input type="text" id="trainNumber" name="trainNumber" placeholder="Ex: 12345" required />
+        <label for="date">Starting Date:</label>
+        <input type="date" id="dates" name="date"/>
+        <button type="button" onclick="getStatus()" >Check Status</button>
+    </form>
+    <div class="loader" id="train-loader"></div>
+    <pre id="output1">
 
-        <input type="text" id="train-number" placeholder="Enter Train Number" />
-        <button onclick="fetchTrainDetails()">Search</button>
-
-   </div>
-    <div id="train-details">
-        <table id="train-table" style="display: none;">
-            <thead>
-                <tr>
-                    <th>Field</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="train-table-body"></tbody>
-        </table>
+    </pre>
+    <div id="trainStatusContainer">
+        <!-- The table will be generated here -->
     </div>
-   
 
-    <div class="schedule-container" id="schedule-container">
-        <h1>Train Schedule</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Station Name</th>
-                    <th>Station Code</th>
-                    <th>Arrival Time</th>
-                    <th>Departure Time</th>
-                    <th>Distance (km)</th>
-                </tr>
-            </thead>
-            <tbody id="train-schedule"></tbody>
-        </table>
-    </div>
+
+    <!--<div class="station">
+        <div class="line">
+            <div class="circle"></div>
+        </div>
+        <div class="details">
+            <h2>KALKA</h2>
+            <div class="timings">
+                <p>Est. Arrival: 12:00 PM</p>
+                <p>Est. Departure :01:00 PM </p>
+            </div>
+            <div class="delay">
+                <p>Delay: 1hr 32min</p>
+            </div>
+        </div>
+
+
+    </div>-->
+
     <script src="script.js"></script>
+
 </body>
 
 </html>
