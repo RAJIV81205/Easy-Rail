@@ -873,3 +873,44 @@ function renderStationCards(data) {
     });
   }
 }
+
+
+async function searchStation(){
+const stnCode =  document.getElementById("at-station").value
+
+try {
+  const response = await fetch('https://easy-rail.onrender.com/at-station', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({stnCode}),
+  });
+
+  const data = await response.json();
+  console.log("Response from backend:", data);
+  showStationLive(data)
+
+
+}catch(error){
+  console.error("Error fetching data:", error);
+
+}}
+
+function showStationLive(data){
+  const container = document.getElementById('trainStationContainer'); 
+
+    data.forEach(train => {
+        const trainDiv = document.createElement('div');
+        trainDiv.className = 'train-det'; 
+
+        trainDiv.innerHTML = `
+            <h3>${train.trainname} (${train.trainno})</h3>
+            <p>${train.source} -> ${train.dest}</p>
+            <h2>${train.timeat}</h2>
+        `;
+
+        container.appendChild(trainDiv);
+    });
+}
+
+
+
