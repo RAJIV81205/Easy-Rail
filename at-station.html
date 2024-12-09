@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>At Station</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.freepik.com/512/7995/7995412.png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <p>Easy-Rail</p>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <div class="navbar" id="navbar">
+            <ul>
+                <li>
+                    <div class="box"><a href="index.html">Home</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="train-search.html">Train Search</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="pnr-status.html">PNR Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="live-status.html">Live Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="at-station.html">At Station</a></div>
+                </li>
+            </ul>
+        </div>
+        <div class="account">
+            <img src="https://i.ibb.co/j4hffQ3/user.png" alt="User">
+        </div>
+    </header>
+
+    <div class="at-station-container">
+        <label for="at-station">Station Code</label>
+        <input type="text" placeholder="Enter Station Code" id="at-station">
+        <button id="search-station" onclick="searchStation()">Search</button>
+    </div>
+
+    <div id="trainStationContainer"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
