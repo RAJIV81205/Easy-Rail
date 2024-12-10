@@ -43,13 +43,17 @@
         </div>
     </header>
 
-    <h1 class="heading">Train Timetable</h1>
+    <h1 class="heading">TRAIN TIMETABLE</h1>
     <div class="search-container">
-        <label for="train-number">Enter Train Number</label>
-        <input type="text" id="train-number" placeholder="Ex: 12345" />
+        
+        <label for="train-number">Enter Train Name or Number</label>
+        <input type="text" id="train-number" placeholder="Ex: 12312 || NETAJI EXPRESS" oninput="getTrainNumber()" />
         <button onclick="fetchTrainDetails()">Search</button>
+        <div class="train-suggestions" id="train-suggestions"></div>
+    </div>
 
-   </div>
+
+    </div>
     <div id="train-details">
         <table id="train-table" style="display: none;">
             <thead>
@@ -61,7 +65,7 @@
             <tbody id="train-table-body"></tbody>
         </table>
     </div>
-   
+
 
     <div class="schedule-container" id="schedule-container">
         <h1>Train Schedule</h1>
