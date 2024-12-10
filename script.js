@@ -41,7 +41,7 @@ hamburger.addEventListener('click', () => {
 
 
 function getTrainNumber() {
-  const trainin = document.getElementById("train-number").value.trim();
+  const trainin = document.getElementById("train-number").value;
   const suggestionsContainer = document.getElementById("train-suggestions");
 
   if(trainin.length<1){
