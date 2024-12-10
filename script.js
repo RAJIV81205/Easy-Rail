@@ -40,15 +40,11 @@ hamburger.addEventListener('click', () => {
 });
 
 
+
 function getTrainNumber() {
-  const trainin = document.getElementById("train-number").value;
+  const trainin = document.getElementById("train-number").value.trim();
   const suggestionsContainer = document.getElementById("train-suggestions");
 
-  if(trainin.length==0){
-    suggestionsContainer.innerHTML = "";
-    suggestionsContainer.style.display="none";
-    return;
-  }
 
   fetch('trains.json')
     .then(response => {
@@ -63,14 +59,21 @@ function getTrainNumber() {
         train.trainName.toLowerCase().includes(trainin.toLowerCase()) ||
         train.trainno.toLowerCase().includes(trainin.toLowerCase())
       );
-
-      const limitedTrains = filteredTrains
 
-   
+      // Limit to 5 results
+      const limitedTrains = filteredTrains;
+
+      // Clear previous suggestions
       suggestionsContainer.innerHTML = "";
       suggestionsContainer.style.display="flex";
 
-      
+      if(trainin.length<1){
+        suggestionsContainer.innerHTML = "";
+        suggestionsContainer.style.display="none";
+        return;
+      }
+
+      // Populate suggestions
       limitedTrains.forEach(train => {
         const suggestion = document.createElement("div");
         suggestion.classList.add("suggestion-item");
@@ -91,6 +94,7 @@ function getTrainNumber() {
       suggestionsContainer.innerHTML = `<div class="error-message">Unable to load suggestions</div>`;
     });
 }
+
 
 
 
