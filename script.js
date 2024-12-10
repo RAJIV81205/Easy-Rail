@@ -63,15 +63,14 @@ function getTrainNumber() {
         train.trainName.toLowerCase().includes(trainin.toLowerCase()) ||
         train.trainno.toLowerCase().includes(trainin.toLowerCase())
       );
+
+      const limitedTrains = filteredTrains
 
-      // Limit to 5 results
-      const limitedTrains = filteredTrains.slice(0, 5);
-
-      // Clear previous suggestions
+   
       suggestionsContainer.innerHTML = "";
       suggestionsContainer.style.display="flex";
 
-      // Populate suggestions
+      
       limitedTrains.forEach(train => {
         const suggestion = document.createElement("div");
         suggestion.classList.add("suggestion-item");
