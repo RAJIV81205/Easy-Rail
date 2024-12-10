@@ -435,6 +435,14 @@ button:hover {
     margin: 5px 0;
 }
 
+#output>h2,h3{
+    letter-spacing: 1px;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 table {
     letter-spacing: 0.5px;
 
