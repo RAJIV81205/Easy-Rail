@@ -40,6 +40,60 @@ hamburger.addEventListener('click', () => {
 });
 
 
+function getTrainNumber() {
+  const trainin = document.getElementById("train-number").value.trim();
+  const suggestionsContainer = document.getElementById("train-suggestions");
+
+  if(trainin.length<1){
+    suggestionsContainer.innerHTML = "";
+    suggestionsContainer.style.display="none";
+    return;
+  }
+
+  fetch('trains.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Filter trains based on user input
+      const filteredTrains = data.filter(train =>
+        train.trainName.toLowerCase().includes(trainin.toLowerCase()) ||
+        train.trainno.toLowerCase().includes(trainin.toLowerCase())
+      );
+
+      // Limit to 5 results
+      const limitedTrains = filteredTrains.slice(0, 5);
+
+      // Clear previous suggestions
+      suggestionsContainer.innerHTML = "";
+      suggestionsContainer.style.display="flex";
+
+      // Populate suggestions
+      limitedTrains.forEach(train => {
+        const suggestion = document.createElement("div");
+        suggestion.classList.add("suggestion-item");
+        suggestion.textContent = `${train.trainName} (${train.trainno})`;
+
+        // Add click event to populate input and clear suggestions
+        suggestion.addEventListener("click", () => {
+          document.getElementById("train-number").value = `${train.trainno}`;
+          suggestionsContainer.innerHTML = ""; 
+          suggestionsContainer.style.display="none";
+        });
+
+        suggestionsContainer.appendChild(suggestion);
+      });
+    })
+    .catch(error => {
+      console.error("Error fetching train data:", error);
+      suggestionsContainer.innerHTML = `<div class="error-message">Unable to load suggestions</div>`;
+    });
+}
+
+
 
 
 
