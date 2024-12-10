@@ -367,13 +367,11 @@ button:hover {
 .search-container {
     text-align: left;
     margin-top: 30px;
-    width: fit-content;
-    min-width: 380px;
+    width: 380px;
+    max-width: 90%;
     min-height: fit-content;
     background-color: #cce5eb;
-    /* Slightly lighter gray */
     border: 2px solid #0A043C;
-    /* Light blue border */
     border-radius: 10px;
     padding: 50px 20px 20px 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -450,6 +448,8 @@ table {
     font-weight: bold;
 
 }
+
+
 
 th,
 td {
