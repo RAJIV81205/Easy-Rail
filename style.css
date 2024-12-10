@@ -464,14 +464,14 @@ td {
 }
 
 th {
-    background-color: #000000;
-    /* Light blue */
-    color: #ffffff;
-    /* Dark text */
+    background-color: #ccff009f;
+    color: #000000;
+    border-bottom: 1px solid black;
+    font-weight: bold;
 }
 
 tr:nth-child(even) {
-    background-color: #e8eded
+    background-color: #e9ede2
 }
 
 .schedule-container {
