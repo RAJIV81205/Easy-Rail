@@ -438,6 +438,8 @@ button:hover {
 }
 
 table {
+    letter-spacing: 0.5px;
+
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
@@ -454,9 +456,10 @@ td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 500;
-    font-style: normal;
+    font-family: "Lexend", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 
 }
 
@@ -791,11 +794,10 @@ tr:nth-child(even) {
     align-items: center;
     margin-top: 350px;
     align-self: center;
-    height: fit-content;
-    min-height: 200px;
+    height: 200px;
+    overflow-y: scroll;
     max-width: 90%;
     width: 600px;
-
     position: absolute;
     background-color: #f4f0f0;
     border: 1px solid gray;
@@ -803,7 +805,13 @@ tr:nth-child(even) {
     box-shadow: 2px 2px 6px rgba(128, 128, 128, 0.333);
 }
 
+.train-suggestions::-webkit-scrollbar{
+    width: 2px;
+
+}
+
 .train-suggestions .suggestion-item {
+    width: 98%;
     border-bottom: 1px solid grey;
     padding: 10px;
     cursor: pointer;
