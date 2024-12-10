@@ -16,7 +16,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: fit-content;
+    min-height: fit-content;
     background-color: rgba(241, 243, 248, 1);
     justify-content: center;
     align-items: center;
@@ -273,7 +273,6 @@ label {
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    font-size: 1rem;
 }
 
 input,
@@ -366,32 +365,36 @@ button:hover {
 }
 
 .search-container {
-    margin-top: 20px;
-    width: 80%;
+    text-align: left;
+    margin-top: 30px;
+    width: fit-content;
+    min-width: 380px;
     min-height: fit-content;
-    background-color: #A1D6E2;
+    background-color: #cce5eb;
     /* Slightly lighter gray */
     border: 2px solid #0A043C;
     /* Light blue border */
     border-radius: 10px;
-    padding: 20px;
+    padding: 50px 20px 20px 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     text-align: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: first baseline;
 }
 
-.search-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
+.search-container label{
+    font-size: 0.9rem;
+
 }
+
 
 .search-container input[type="text"] {
-    width: 70%;
+    width: 100%;
     padding: 5px;
+    margin: 10px 0;
     border: 2px solid #000000;
     border-radius: 10px;
     background-color: #ffffff;
@@ -407,12 +410,14 @@ button:hover {
     border: 2px solid black;
     border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100px;
+    transition: background-color 0.3s , scale 0.3s , letter-spacing 0.3s;
+    width: 100%;
 }
 
 .search-container button:hover {
-    background-color: #60696b;
+    scale: 1.05;
+    background-color: #12e281;
+    letter-spacing: 2px;
 }
 
 #train-details {
@@ -757,6 +762,7 @@ tr:nth-child(even) {
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    margin: 25px 0;
 }
 
 .train-det{
@@ -777,4 +783,45 @@ tr:nth-child(even) {
     align-items: center;
     flex-wrap: wrap;
 }
+
+.train-suggestions{
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 350px;
+    align-self: center;
+    height: fit-content;
+    min-height: 200px;
+    max-width: 90%;
+    width: 600px;
+
+    position: absolute;
+    background-color: #f4f0f0;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-shadow: 2px 2px 6px rgba(128, 128, 128, 0.333);
+}
+
+.train-suggestions .suggestion-item {
+    border-bottom: 1px solid grey;
+    padding: 10px;
+    cursor: pointer;
+    font-family: "Lexend", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 0.9rem;
+    font-style: normal;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #787777;
+  }
+  
+  .error-message {
+    color: red;
+    padding: 10px;
+    font-size: 0.9em;
+  }
+
 
