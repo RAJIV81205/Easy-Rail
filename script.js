@@ -44,7 +44,7 @@ function getTrainNumber() {
   const trainin = document.getElementById("train-number").value;
   const suggestionsContainer = document.getElementById("train-suggestions");
 
-  if(trainin.length<1){
+  if(trainin.length==0){
     suggestionsContainer.innerHTML = "";
     suggestionsContainer.style.display="none";
     return;
