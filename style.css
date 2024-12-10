@@ -435,7 +435,7 @@ button:hover {
     margin: 5px 0;
 }
 
-#output>h2,h3{
+#output h3 , #output h2{
     letter-spacing: 1px;
     margin-top: 20px;
     text-align: center;
