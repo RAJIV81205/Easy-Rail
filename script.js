@@ -602,6 +602,7 @@ function parseTrainData(data) {
 
 
 
+
 function displayTrains(trains) {
   const resultContainer = document.getElementById("train-results");
   resultContainer.innerHTML = "";
