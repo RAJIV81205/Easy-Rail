@@ -800,7 +800,7 @@ tr:nth-child(even) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin-top: 350px;
+    margin-top: 230px;
     align-self: center;
     height: 200px;
     overflow-y: scroll;
