@@ -828,7 +828,7 @@ async function getStatus() {
     console.log("Date:", dates);
 
     try {
-        const response = await fetch('https://easy-rail-75o9.onrender.com/fetch-train-status', {
+        const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ trainNumber, dates }),
@@ -938,7 +938,7 @@ document.getElementById('trainStationContainer').innerHTML="";
 const stnCode =  document.getElementById("at-station").value
 
 try {
-  const response = await fetch('https://easy-rail-75o9.onrender.com/at-station', {
+  const response = await fetch('https://easy-rail.onrender.com/at-station', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({stnCode}),
