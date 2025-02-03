@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Dekko&family=Encode+Sans+Semi+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Lemonada:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 * {
     margin: 0;
@@ -10,6 +11,10 @@
 
 :-webkit-any-link {
     text-decoration: none;
+}
+
+::-webkit-scrollbar {
+    scrollbar-width: none;
 }
 
 body {
@@ -68,8 +73,11 @@ header {
 
 .navbar ul li a {
     text-decoration: none;
-    font-family: "Dekko", cursive;
-    font-size: 1.2rem;
+    font-family: "Outfit", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+
     color: #0A043C;
 }
 
@@ -198,20 +206,7 @@ header {
         font-size: 0.9rem;
     }
 
-    .suggestions-from,
-    .suggestions-to {
-        position: absolute;
-        background-color: #fff;
-        border: 1px solid #000000;
-        border-top: none;
-        height: 220px;
-        overflow-y: auto;
-        width: 65% !important;
-        margin-top: 290px !important;
-        z-index: 10;
-        display: none;
 
-    }
 
 }
 
@@ -286,6 +281,7 @@ select {
 }
 
 .input-box {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 240px;
@@ -326,14 +322,17 @@ button:hover {
 
 .suggestions-from,
 .suggestions-to {
+    top: 70px;
+
     position: absolute;
+
+    width: 100%;
     background-color: #fff;
     border: 1px solid #ddd;
     border-top: none;
-    height: 200px;
+    height: fit-content;
+    max-height: 200px;
     overflow-y: auto;
-    width: 30%;
-    margin-top: 280px;
     z-index: 10;
     display: none;
 
@@ -365,6 +364,7 @@ button:hover {
 }
 
 .search-container {
+    position: relative;
     text-align: left;
     margin-top: 30px;
     width: 380px;
@@ -383,7 +383,7 @@ button:hover {
     align-items: first baseline;
 }
 
-.search-container label{
+.search-container label {
     font-size: 0.9rem;
 
 }
@@ -408,7 +408,7 @@ button:hover {
     border: 2px solid black;
     border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s , scale 0.3s , letter-spacing 0.3s;
+    transition: background-color 0.3s, scale 0.3s, letter-spacing 0.3s;
     width: 100%;
 }
 
@@ -435,7 +435,8 @@ button:hover {
     margin: 5px 0;
 }
 
-#output h3 , #output h2{
+#output h3,
+#output h2 {
     letter-spacing: 1px;
     margin-top: 20px;
     text-align: center;
@@ -465,9 +466,9 @@ td {
     text-align: center;
     border: 1px solid #ddd;
     font-family: "Lexend", serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 
 }
 
@@ -704,25 +705,25 @@ tr:nth-child(even) {
 }
 
 
-.timings span{
+.timings span {
     color: rgb(231, 104, 104);
 }
 
-.details h2{
-    letter-spacing:1.5px;
+.details h2 {
+    letter-spacing: 1.5px;
     word-spacing: 5px;
 }
 
-@media screen and (max-width:550px){
-    .line{
+@media screen and (max-width:550px) {
+    .line {
         margin-left: 30px;
     }
 
-    .timings{
+    .timings {
         font-size: 12px;
     }
 
-    .details h2{
+    .details h2 {
         font-size: 1.1rem;
     }
 
@@ -730,15 +731,15 @@ tr:nth-child(even) {
         font-size: 14px;
     }
 
-    .train-det h3{
+    .train-det h3 {
         font-size: 0.6rem;
     }
 
-    .train-det p{
+    .train-det p {
         font-size: 0.5rem;
     }
 
-    .train-det h2{
+    .train-det h2 {
         font-size: 0.6rem;
 
     }
@@ -746,7 +747,7 @@ tr:nth-child(even) {
 
 }
 
-.at-station-container{
+.at-station-container {
     margin-top: 20px;
     width: 60%;
     display: flex;
@@ -757,17 +758,20 @@ tr:nth-child(even) {
     flex-wrap: wrap;
     background-color: #dfefff;
 }
-.at-station-container label , .at-station-container input , .at-station-container button {
+
+.at-station-container label,
+.at-station-container input,
+.at-station-container button {
     margin: 10px 0;
 }
 
-.at-station-container button{
+.at-station-container button {
     width: fit-content;
     padding: 10px 20px;
 }
 
 
-#trainStationContainer{
+#trainStationContainer {
     width: 100%;
     display: flex;
     align-items: center;
@@ -776,9 +780,9 @@ tr:nth-child(even) {
     margin: 25px 0;
 }
 
-.train-det{
+.train-det {
     margin-top: 20px;
-    padding: 10px 10px ;
+    padding: 10px 10px;
     width: 95%;
     height: fit-content;
     background-color: #A1D6E2;
@@ -795,7 +799,7 @@ tr:nth-child(even) {
     flex-wrap: wrap;
 }
 
-.train-suggestions{
+.train-suggestions {
     display: none;
     flex-direction: column;
     justify-content: flex-start;
@@ -804,8 +808,7 @@ tr:nth-child(even) {
     align-self: center;
     height: 200px;
     overflow-y: scroll;
-    max-width: 90%;
-    width: 600px;
+    width: 100%;
     position: absolute;
     background-color: #f4f0f0;
     border: 1px solid gray;
@@ -813,7 +816,7 @@ tr:nth-child(even) {
     box-shadow: 2px 2px 6px rgba(128, 128, 128, 0.333);
 }
 
-.train-suggestions::-webkit-scrollbar{
+.train-suggestions::-webkit-scrollbar {
     width: 2px;
 
 }
@@ -828,16 +831,14 @@ tr:nth-child(even) {
     font-weight: 400;
     font-size: 0.9rem;
     font-style: normal;
-  }
-  
-  .suggestion-item:hover {
+}
+
+.suggestion-item:hover {
     background-color: #787777;
-  }
-  
-  .error-message {
+}
+
+.error-message {
     color: red;
     padding: 10px;
     font-size: 0.9em;
-  }
-
-
+}
