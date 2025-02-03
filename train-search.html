@@ -43,11 +43,12 @@
         </div>
     </header>
 
-    <h1 class="heading">TRAIN TIMETABLE</h1>
+    <h1 class="heading">Train Timetable</h1>
     <div class="search-container">
         
+        
         <label for="train-number">Enter Train Name or Number</label>
-        <input type="text" id="train-number" placeholder="Ex: 12312 || NETAJI EXPRESS" oninput="getTrainNumber()" />
+        <input type="text" id="train-number" placeholder="Ex: 12312 || NETAJI EXPRESS" oninput="getTrainNumber()" autocomplete="off"/>
         <button onclick="fetchTrainDetails()">Search</button>
         <div class="train-suggestions" id="train-suggestions"></div>
     </div>
