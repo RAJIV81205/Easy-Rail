@@ -1,11 +1,25 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
   var currentPage = window.location.pathname.split("/").pop();
-  if (currentPage ==""){
+  if (currentPage == "") {
     currentPage = "index.html";
   }
   const navLinks = document.querySelectorAll(".navbar .box a");
-  fetchTrainDetails();
-  sessionStorage.removeItem("selectedTrainNumber");
+  
+
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const trainNo = urlParams.get('trainno');
+  
+
+  if(trainNo){
+    fetchTrainDetails(trainNo);
+  }
+
+
+
+
 
 
 
@@ -17,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       link.parentElement.classList.add("active-box");
 
 
-    }     
+    }
     else {
       link.parentElement.classList.remove("active-box");
     }
@@ -25,22 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var current = new Date().toLocaleDateString()
   current = current.split("/")
- try {
+
+  try {
     document.getElementById("date").value = current[2] + "-" + current[1] + "-" + current[0];
-    
+
   } catch (error) {
     console.log("Not on main page")
-    
+
   }
 
   try {
     document.getElementById("dates").value = current[2] + "-" + current[1] + "-" + current[0];
 
-    
+
   } catch (error) {
     console.log("Not on live-status page")
-    
+
   }
+
 
 
 });
@@ -79,11 +95,11 @@ function getTrainNumber() {
 
       // Clear previous suggestions
       suggestionsContainer.innerHTML = "";
-      suggestionsContainer.style.display="flex";
+      suggestionsContainer.style.display = "flex";
 
-      if(trainin.length<1){
+      if (trainin.length < 1) {
         suggestionsContainer.innerHTML = "";
-        suggestionsContainer.style.display="none";
+        suggestionsContainer.style.display = "none";
         return;
       }
 
@@ -96,8 +112,8 @@ function getTrainNumber() {
         // Add click event to populate input and clear suggestions
         suggestion.addEventListener("click", () => {
           document.getElementById("train-number").value = `${train.trainno}`;
-          suggestionsContainer.innerHTML = ""; 
-          suggestionsContainer.style.display="none";
+          suggestionsContainer.innerHTML = "";
+          suggestionsContainer.style.display = "none";
         });
 
         suggestionsContainer.appendChild(suggestion);
@@ -114,8 +130,11 @@ function getTrainNumber() {
 
 
 
-async function fetchTrainDetails() {
-  const trainNumber = document.getElementById("train-number").value.trim() || sessionStorage.getItem("selectedTrainNumber");
+
+
+
+async function fetchTrainDetails(trainNo) {
+  const trainNumber = document.getElementById("train-number").value.trim() || sessionStorage.getItem("selectedTrainNumber") || trainNo;
   const trainTable = document.getElementById("train-table");
   const trainTableBody = document.getElementById("train-table-body");
   const trainScheduleBody = document.getElementById('train-schedule');
@@ -312,10 +331,6 @@ function parseTrainRoute(string) {
 
 
 
-
-
-
-
 let debounceTimer;
 
 
@@ -331,11 +346,8 @@ function searchStationFrom() {
       return;
     }
     filterStationFrom(input);
-  }, 300); 
+  }, 300);
 }
-
-
-
 
 
 
@@ -416,8 +428,9 @@ function searchStationTo() {
       return;
     }
     filterStationTo(input);
-  }, 300); 
+  }, 300);
 }
+
 
 
 
@@ -533,7 +546,7 @@ function parseTrainData(data) {
   try {
     const arr = [];
     const rawData = data.split("~~~~~~~~").filter((el) => el.trim() !== ""); // Filter valid data
-    console.log("Raw Data:", rawData);
+
 
     // Check for error messages
     if (rawData[0].includes("No direct trains found")) {
@@ -562,8 +575,7 @@ function parseTrainData(data) {
       const nextData = rawData[i + 1] || ""; // Ensure next data exists or use an empty string
       const trainData2 = nextData.split("~^");
 
-      console.log("Train Data:", trainData);
-      console.log("Train Data 2:", trainData2);
+
 
       if (trainData.length === 2) {
         const details = trainData[1].split("~").filter((el) => el.trim() !== "");
@@ -571,8 +583,7 @@ function parseTrainData(data) {
           ? trainData2[0].split("~").filter((el) => el.trim() !== "")
           : []; // Handle empty trainData2 safely
 
-        console.log("Details:", details);
-        console.log("Details 2:", details2);
+
 
         if (details.length >= 14) {
           arr.push({
@@ -628,7 +639,6 @@ function parseTrainData(data) {
 
 
 
-
 function displayTrains(trains) {
   const resultContainer = document.getElementById("train-results");
   resultContainer.innerHTML = "";
@@ -651,8 +661,8 @@ function displayTrains(trains) {
 
   resultContainer.innerHTML = `<h1>List of Trains from ${from} to ${to}.</h1>`;
   trains.forEach(train => {
-    // Filter trains by running days
-    if (train.running_days[selectedDayIndex] !== "1") return; // Skip if train doesn't run today
+
+    if (train.running_days[selectedDayIndex] !== "1") return;
 
     const trainItem = document.createElement("div");
     trainItem.classList.add("train-item");
@@ -685,23 +695,14 @@ function displayTrains(trains) {
       </div>
       <div class="train-footer">
         <span>${train.source_stn_name} ➡ ${train.dstn_stn_name}</span>
-        <a href="train-search.html" class="timetable-link" id="timeTableLink" data-train-number="${train.train_no}">Time Table</a>
+        <a href="train-search.html?trainno=${train.train_no}" class="timetable-link" id="timeTableLink" data-train-number="${train.train_no}">Time Table</a>
       </div>
     `;
 
     resultContainer.appendChild(trainItem);
     resultContainer.scrollIntoView();
 
-    const timeTableLinks = document.querySelectorAll(".timetable-link");
-
-    timeTableLinks.forEach(link => {
-      link.addEventListener("click", function () {
-        const trainNumber = link.dataset.trainNumber; 
-        console.log(trainNumber);
-        sessionStorage.setItem("selectedTrainNumber", trainNumber);
-
-      });
-    });
+    
 
 
   });
@@ -834,95 +835,94 @@ function showPNRdetails(data) {
 
 
 async function getStatus() {
-    const container = document.getElementById('trainStatusContainer');
-    container.innerHTML = ''; 
+  const container = document.getElementById('trainStatusContainer');
+  container.innerHTML = '';
 
-    console.log("Form submitted");
+  console.log("Form submitted");
 
-    const trainNumber = document.getElementById('trainNumber').value;
+  const trainNumber = document.getElementById('trainNumber').value;
 
-    if (trainNumber.length !== 5) {
-        alert("WRONG TRAIN NUMBER");
-        return;
-    }
+  if (trainNumber.length !== 5) {
+    alert("WRONG TRAIN NUMBER");
+    return;
+  }
 
-    document.getElementById("train-loader").style.display = "flex";
-    document.getElementById("output1").innerText = "Fetching Train Details........🔍";
-    const dates = document.getElementById('dates').value;
+  document.getElementById("train-loader").style.display = "flex";
+  document.getElementById("output1").innerText = "Fetching Train Details........🔍";
+  const dates = document.getElementById('dates').value;
 
-    console.log("Train Number:", trainNumber);
-    console.log("Date:", dates);
+  console.log("Train Number:", trainNumber);
+  console.log("Date:", dates);
 
-    try {
-        const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ trainNumber, dates }),
-        });
+  try {
+    const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trainNumber, dates }),
+    });
 
-        const data = await response.json();
-        console.log("Response from backend:", data);
+    const data = await response.json();
+    console.log("Response from backend:", data);
 
-         if (response.ok) {
-            if (data.length != 0) {
-                renderStationCards(data);
-                setInterval(() => {
-                console.log("Auto-refreshing data...");
-                getStatus(); 
+    if (response.ok) {
+      if (data.length != 0) {
+        renderStationCards(data);
+        setInterval(() => {
+          console.log("Auto-refreshing data...");
+          getStatus();
 
-              }, 60000);
-            }
-        else{
+        }, 60000);
+      }
+      else {
         document.getElementById('output1').textContent = `No details found for train Number: ${trainNumber}`;
         document.getElementById("train-loader").style.display = "none";
       }
 
-            
-            
-        } else {
-            document.getElementById('output1').textContent = `Error: ${data.error}`;
-        }
-    } catch (error) {
-        console.error("Error:", error.message);
-        document.getElementById("train-loader").style.display = "none";
-        document.getElementById('output1').textContent = `Error: ${error.message}`;
+
+
+    } else {
+      document.getElementById('output1').textContent = `Error: ${data.error}`;
     }
+  } catch (error) {
+    console.error("Error:", error.message);
+    document.getElementById("train-loader").style.display = "none";
+    document.getElementById('output1').textContent = `Error: ${error.message}`;
+  }
 }
 
 function renderStationCards(data) {
   const container = document.getElementById('trainStatusContainer');
-  container.innerHTML = ""; 
+  container.innerHTML = "";
 
   document.getElementById("train-loader").style.display = "none";
   document.getElementById("output1").innerText = "";
 
-  let currentStationElement = null; 
+  let currentStationElement = null;
 
   data.forEach((station) => {
-    
+
     const stationCard = document.createElement('div');
     stationCard.className = 'station';
 
-   
+
     if (station.current === "true") {
       stationCard.style.backgroundColor = '#A1D6E2';
-      currentStationElement = stationCard; 
+      currentStationElement = stationCard;
     } else if (station.status === "crossed") {
       stationCard.style.backgroundColor = '#e6e6e6';
     } else {
       stationCard.style.backgroundColor = '#c2f5ba';
     }
 
-    
+
     stationCard.innerHTML = `
       <div class="line">
-        <img class="circle" src="${
-          station.current === "true"
-            ? "https://i.postimg.cc/SKNfYCLn/train.png"
-            : station.status === "crossed"
-            ? "https://i.postimg.cc/7651m4WD/healthy.png"
-            : "https://i.postimg.cc/g0SqVj4N/next-week.png"
-        }" alt="status" />
+        <img class="circle" src="${station.current === "true"
+        ? "https://i.postimg.cc/SKNfYCLn/train.png"
+        : station.status === "crossed"
+          ? "https://i.postimg.cc/7651m4WD/healthy.png"
+          : "https://i.postimg.cc/g0SqVj4N/next-week.png"
+      }" alt="status" />
       </div>
       <div class="details">
         <h2>${station.station}</h2>
@@ -936,7 +936,7 @@ function renderStationCards(data) {
       </div>
     `;
 
-    // Change delay color based on status
+
     const delayElement = stationCard.querySelector('.delay p');
     if (station.delay === "") {
       delayElement.style.color = "green";
@@ -945,57 +945,60 @@ function renderStationCards(data) {
       delayElement.style.color = "red";
     }
 
-    // Append the card to the container
+
     container.appendChild(stationCard);
   });
 
-  
   if (currentStationElement) {
     currentStationElement.scrollIntoView({
       behavior: "smooth",
-      block: "center",    
+      block: "center",
     });
   }
 }
 
+async function searchStation() {
+  const stnCode = document.getElementById("at-station").value;
+  document.getElementById('trainStationContainer').innerHTML = "";
 
-async function searchStation(){
-document.getElementById('trainStationContainer').innerHTML="";
-const stnCode =  document.getElementById("at-station").value
+  try {
+    const response = await fetch('https://easy-rail.onrender.com/at-station', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stnCode }),
+    });
 
-try {
-  const response = await fetch('https://easy-rail.onrender.com/at-station', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({stnCode}),
-  });
-
-  const data = await response.json();
-  console.log("Response from backend:", data);
-  showStationLive(data)
+    const data = await response.json();
+    console.log("Response from backend:", data);
+    showStationLive(data)
 
 
-}catch(error){
-  console.error("Error fetching data:", error);
+  } catch (error) {
+    console.error("Error fetching data:", error);
 
-}}
+  }
+}
 
-function showStationLive(data){
-  const container = document.getElementById('trainStationContainer'); 
+function showStationLive(data) {
+  const container = document.getElementById('trainStationContainer');
 
-    data.forEach(train => {
-        const trainDiv = document.createElement('div');
-        trainDiv.className = 'train-det'; 
 
-        trainDiv.innerHTML = `
+  data.forEach(train => {
+    const trainDiv = document.createElement('div');
+    trainDiv.className = 'train-det';
+
+    trainDiv.innerHTML = `
             <h3>${train.trainname} (${train.trainno})</h3>
             <p>${train.source} &#8594 ${train.dest}</p>
             <h2>${train.timeat}</h2>
         `;
 
-        container.appendChild(trainDiv);
-    });
-}
+    trainDiv.onclick = () => {
+      window.location.href = `train-search.html?trainno=${train.trainno}`;
+    };
 
+    container.appendChild(trainDiv);
+  });
+}
 
 
