@@ -25,8 +25,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var current = new Date().toLocaleDateString()
   current = current.split("/")
-  document.getElementById("date").value = current[2] + "-" + current[1] + "-" + current[0];
-  document.getElementById("dates").value = current[2] + "-" + current[1] + "-" + current[0];
+ try {
+    document.getElementById("date").value = current[2] + "-" + current[1] + "-" + current[0];
+    
+  } catch (error) {
+    console.log("Not on main page")
+    
+  }
+
+  try {
+    document.getElementById("dates").value = current[2] + "-" + current[1] + "-" + current[0];
+
+    
+  } catch (error) {
+    console.log("Not on live-status page")
+    
+  }
 
 
 });
@@ -302,17 +316,26 @@ function parseTrainRoute(string) {
 
 
 
+let debounceTimer;
+
+
 
 function searchStationFrom() {
-  input = document.getElementById("from").value;
-  if (input.length < 2) {
-    const suggestionsBox = document.getElementById("suggestions-from");
-    suggestionsBox.style.display = "none";
-    suggestionsBox.innerHTML = "";
-    return;
-  }
-  filterStationFrom(input);
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    input = document.getElementById("from").value;
+    if (input.length < 2) {
+      const suggestionsBox = document.getElementById("suggestions-from");
+      suggestionsBox.style.display = "none";
+      suggestionsBox.innerHTML = "";
+      return;
+    }
+    filterStationFrom(input);
+  }, 300); 
 }
+
+
+
 
 
 
@@ -380,18 +403,21 @@ function filterStationFrom(input) {
 
 
 
+let debounceTimerTo;
 
 function searchStationTo() {
-  input = document.getElementById("to").value;
-  if (input.length < 2) {
-    const suggestionsBox = document.getElementById("suggestions-to");
-    suggestionsBox.style.display = "none";
-    suggestionsBox.innerHTML = "";
-    return;
-  }
-  filterStationTo(input);
+  clearTimeout(debounceTimerTo);
+  debounceTimerTo = setTimeout(() => {
+    input = document.getElementById("to").value;
+    if (input.length < 2) {
+      const suggestionsBox = document.getElementById("suggestions-to");
+      suggestionsBox.style.display = "none";
+      suggestionsBox.innerHTML = "";
+      return;
+    }
+    filterStationTo(input);
+  }, 300); 
 }
-
 
 
 
