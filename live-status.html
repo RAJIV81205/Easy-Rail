@@ -25,6 +25,9 @@
                     <div class="box"><a href="index.html">Home</a></div>
                 </li>
                 <li>
+                    <div class="box"><a href="availability.html">Availability</a></div>
+                </li>
+                <li>
                     <div class="box"><a href="train-search.html">Train Search</a></div>
                 </li>
                 <li>
@@ -49,7 +52,7 @@
         <input type="text" id="trainNumber" name="trainNumber" placeholder="Ex: 12345" required autocomplete="off"/>
         <label for="date">Starting Date:</label>
         <input type="date" id="dates" name="date"/>
-        <button type="button" onclick="getStatus()" >Check Status</button>
+        <button type="button" class="search-button" onclick="getStatus()" >Check Status</button>
     </form>
     <div class="loader" id="train-loader"></div>
     <pre id="output1">
