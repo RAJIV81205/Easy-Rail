@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPage = "index.html";
   }
   const navLinks = document.querySelectorAll(".navbar .box a");
-  
+
 
 
   const urlParams = new URLSearchParams(window.location.search);
   const trainNo = urlParams.get('trainno');
-  
 
-  if(trainNo){
+
+  if (trainNo) {
     fetchTrainDetails(trainNo);
   }
 
@@ -54,6 +54,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   } catch (error) {
     console.log("Not on live-status page")
+
+  }
+
+  try {
+    document.getElementById("aval-date").value = current[2] + "-" + current[1] + "-" + current[0];
+
+
+  } catch (error) {
+    console.log("Not on live-status page")
+
+  }
+
+
+  try {
+    const dateTabs = document.querySelectorAll('.date-tab');
+    const dateInput = document.getElementById('aval-date');
+
+    dateTabs.forEach(tab => {
+      tab.addEventListener('click', function () {
+
+        dateTabs.forEach(t => t.classList.remove('active'));
+
+        this.classList.add('active');
+
+
+        updateDateInput(this.id);
+      });
+    })
+
+  } catch (error) {
+    console.error("Not on Aval Page", error)
 
   }
 
@@ -503,44 +534,47 @@ function getDayIndex(dateString) {
 
 
 
+try {
+  document.getElementById("main-search").addEventListener("click", function () {
+    const from = sessionStorage.getItem("from").toLowerCase().trim();
+    const to = sessionStorage.getItem("to").toLowerCase().trim();
 
-document.getElementById("main-search").addEventListener("click", function () {
-  const from = sessionStorage.getItem("from").toLowerCase().trim();
-  const to = sessionStorage.getItem("to").toLowerCase().trim();
 
 
+    // Check if both input fields have values
+    if (!from || !to) {
+      alert("Please enter both 'From' and 'To' stations.");
+      return;
+    }
 
-  // Check if both input fields have values
-  if (!from || !to) {
-    alert("Please enter both 'From' and 'To' stations.");
-    return;
-  }
+    const apiUrl = `https://erail.in/rail/getTrains.aspx?Station_From=${from}&Station_To=${to}&DataSource=0&Language=0&Cache=true`;
 
-  const apiUrl = `https://erail.in/rail/getTrains.aspx?Station_From=${from}&Station_To=${to}&DataSource=0&Language=0&Cache=true`;
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok. Status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(data => {
+        const result = parseTrainData(data);
 
-  fetch(apiUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok. Status: ${response.status}`);
-      }
-      return response.text();
-    })
-    .then(data => {
-      const result = parseTrainData(data);
-
-      if (result.success) {
-        console.log("Trains Found:", result.data);
-        displayTrains(result.data); // Display trains if found
-      } else {
-        console.warn("No trains found:", result.data);
-        alert(result.data); // Alert user if no trains are found
-      }
-    })
-    .catch(error => {
-      console.error("Fetch error:", error);
-      alert("An error occurred while fetching train data. Please try again.");
-    });
-});
+        if (result.success) {
+          console.log("Trains Found:", result.data);
+          displayTrains(result.data); // Display trains if found
+        } else {
+          console.warn("No trains found:", result.data);
+          alert(result.data); // Alert user if no trains are found
+        }
+      })
+      .catch(error => {
+        console.error("Fetch error:", error);
+        alert("An error occurred while fetching train data. Please try again.");
+      });
+  });
+} catch (err) {
+  console.log("Not on Main page")
+}
 
 function parseTrainData(data) {
   try {
@@ -702,7 +736,7 @@ function displayTrains(trains) {
     resultContainer.appendChild(trainItem);
     resultContainer.scrollIntoView();
 
-    
+
 
 
   });
@@ -1002,3 +1036,277 @@ function showStationLive(data) {
 }
 
 
+
+function updateDateInput(tabId) {
+  const dateInput = document.getElementById('aval-date');
+  const today = new Date();
+  let selectedDate;
+
+  switch (tabId) {
+    case 'date-today':
+      selectedDate = today;
+      break;
+    case 'date-tom':
+      selectedDate = new Date(today);
+      selectedDate.setDate(today.getDate() + 1);
+      break;
+    case 'date-after':
+      selectedDate = new Date(today);
+      selectedDate.setDate(today.getDate() + 2);
+      break;
+  }
+
+
+  const formattedDate = selectedDate.toISOString().split('T')[0];
+  dateInput.value = formattedDate;
+}
+
+
+
+try {
+  const station_fr = document.getElementById("station-input-from");
+  let debounceTimer;
+  const debounceDelay = 300;
+
+  station_fr.addEventListener("input", async () => {
+    const input = station_fr.value;
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+      if (input.length > 2) {
+        getStationFrom(input);
+      } else {
+        document.getElementById("station-from").style.display = "none";
+      }
+    }, debounceDelay);
+  });
+} catch (error) {
+  console.log("not on aval page");
+}
+
+
+function getStationFrom(input) {
+  const suggestionsBox = document.getElementById("station-from");
+
+  if (input) {
+    fetch('stations.json')
+      .then(response => response.json())
+      .then(data => {
+
+
+        const stationnaam = data.stations;
+
+
+
+        const filteredStations = stationnaam.filter(station =>
+          station.stnName.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCode.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCity.toLowerCase().includes(input.toLowerCase())
+        );
+
+
+
+        if (filteredStations.length === 0) {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "<div class='no-results'>No results found</div>";
+        } else {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "";
+          filteredStations.forEach(station => {
+            const suggestionItem = document.createElement("div");
+            suggestionItem.classList.add("suggestion-item");
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
+            suggestionItem.addEventListener("click", () => {
+              document.getElementById("station-input-from").value = `${station.stnName} (${station.stnCode})`;
+              sessionStorage.setItem("from", `${station.stnCode}`)
+              suggestionsBox.style.display = "none";
+              suggestionsBox.innerHTML = "";
+            });
+            suggestionsBox.appendChild(suggestionItem);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+  } else {
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = "";
+  }
+
+}
+
+
+
+
+try {
+  const station_to = document.getElementById("station-input-to");
+  let debounceTimer;
+  const debounceDelay = 300;
+
+  station_to.addEventListener("input", async () => {
+    const input = station_to.value;
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+      if (input.length > 2) {
+        getStationTo(input);
+      } else {
+        document.getElementById("station-to").style.display = "none";
+      }
+    }, debounceDelay);
+  });
+} catch (error) {
+  console.log("not on aval page");
+}
+
+
+function getStationTo(input) {
+  const suggestionsBox = document.getElementById("station-to");
+
+  if (input) {
+    fetch('stations.json')
+      .then(response => response.json())
+      .then(data => {
+
+
+        const stationnaam = data.stations;
+
+
+
+        const filteredStations = stationnaam.filter(station =>
+          station.stnName.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCode.toLowerCase().includes(input.toLowerCase()) ||
+          station.stnCity.toLowerCase().includes(input.toLowerCase())
+        );
+
+
+
+        if (filteredStations.length === 0) {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "<div class='no-results'>No results found</div>";
+        } else {
+          suggestionsBox.style.display = "block";
+          suggestionsBox.innerHTML = "";
+          filteredStations.forEach(station => {
+            const suggestionItem = document.createElement("div");
+            suggestionItem.classList.add("suggestion-item");
+            suggestionItem.textContent = `${station.stnName} (${station.stnCode})`;
+            suggestionItem.addEventListener("click", () => {
+              document.getElementById("station-input-to").value = `${station.stnName} (${station.stnCode})`;
+              sessionStorage.setItem("to", `${station.stnCode}`)
+              suggestionsBox.style.display = "none";
+              suggestionsBox.innerHTML = "";
+            });
+            suggestionsBox.appendChild(suggestionItem);
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+      });
+  } else {
+    suggestionsBox.style.display = "none";
+    suggestionsBox.innerHTML = "";
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+try {
+  const aval_button = document.getElementById("get-aval")
+  aval_button.addEventListener("click", async () => {
+    const from = sessionStorage.getItem("from")
+    const to = sessionStorage.getItem("to")
+    const dateString = document.getElementById("aval-date").value;
+    const date = new Date(dateString);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    const indianFormatDate = `${day}-${month}-${year}`;
+    console.log(indianFormatDate);
+
+    const response = await fetch(`https://cttrainsapi.confirmtkt.com/api/v1/trains/search?sourceStationCode=${from}&destinationStationCode=${to}&addAvailabilityCache=true&excludeMultiTicketAlternates=false&excludeBoostAlternates=false&sortBy=DEFAULT&dateOfJourney=${indianFormatDate}&enableNearby=true&enableTG=true&tGPlan=CTG-3&showTGPrediction=false&tgColor=DEFAULT&showPredictionGlobal=true`);
+    const data = await response.json()
+
+    getAvailability(data)
+
+  })
+
+} catch (error) {
+  console.error("Error in getting data", error)
+
+}
+
+
+function getAvailability(data) {
+  const container = document.querySelector(".aval-container");
+  container.innerHTML =""
+
+  data.data.trainList.forEach((train) => {
+    const seatHTML = train.avlClassesSorted
+      .map((classType) => {
+        const isTatkal = classType.includes("_TQ"); 
+        const classKey = isTatkal ? classType.replace("_TQ", "") : classType;
+        const classData = isTatkal
+          ? train.availabilityCacheTatkal[classKey] || {}
+          : train.availabilityCache[classKey] || {}; 
+
+       
+        const isUnavailable =
+          classData.availabilityDisplayName === "Train Cancelled" ||
+          classData.availabilityDisplayName === "Train Departed" ||
+          classData.availabilityDisplayName === "Regret" ||
+          classData.availabilityDisplayName === "Not Available"
+          
+
+        return `
+      <div class="seat-aval ${isUnavailable ? "red-bg" : ""}">
+          <div class="seat-aval-header">
+              <div class="seat-name"><strong>${classType}</strong></div>
+              <div class="seat-price"><strong>₹${classData.fare || "---"}</strong></div>
+          </div>
+          <div class="seat-aval-details  ${isUnavailable ? "red-text" : ""}"><strong>${classData.availabilityDisplayName || "WL --"}</strong></div>
+          ${isUnavailable ? `<div class="seat-aval-chance ${isUnavailable ? "red-text" : "" }">No Chance</div>` : `<div class="seat-aval-chance">${classData.prediction || "--%"}</div>`}
+          
+      </div>`;
+      })
+      .join("");
+
+    const html = `
+    <div class="aval-train">
+        <div class="train-header">
+            <div class="train-no">${train.trainNumber} - ${train.trainName}</div>
+            ${train.hasPantry ? `<div class="pantry"><img src="img/pantry.png" alt="pantry"></div>` : "" }
+            
+        </div>
+        <div class="train-data">
+            <div class="train-timings">
+                <strong>${train.departureTime} ${train.fromStnCode}</strong> 
+                <span>${Math.floor(train.duration / 60)}h ${train.duration % 60}m</span> 
+                <strong>${train.arrivalTime} ${train.toStnCode}</strong>
+            </div>
+            <div class="train-sche-link"><a href="/train-search.html?trainno=${train.trainNumber}">Schedule</a></div>
+        </div>
+        <div class="seats">
+            ${seatHTML}
+        </div>
+    </div>`;
+
+    container.insertAdjacentHTML("beforeend", html);
+  });
+}
