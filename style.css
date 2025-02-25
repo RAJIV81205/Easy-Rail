@@ -290,7 +290,7 @@ select {
     justify-content: space-around;
 }
 
-button {
+#main-search {
     width: 150px;
     height: 40px;
     border-radius: 20px;
@@ -303,7 +303,7 @@ button {
 
 }
 
-button:hover {
+#main-search:hover {
     background-color: #01ffd5;
     font-size: 1.1rem;
     scale: 1.1;
@@ -407,16 +407,17 @@ button:hover {
     color: #0A043C;
     background-color: #ebebeb;
     border: 2px solid black;
-    border-radius: 25px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s, scale 0.3s, letter-spacing 0.3s;
     width: 100%;
 }
 
 .search-container button:hover {
-    scale: 1.05;
-    background-color: #12e281;
-    letter-spacing: 2px;
+    scale: 1.01;
+    background-color: #ffffff;
+    color: #000000;
+    letter-spacing: 1px;
 }
 
 #train-details {
@@ -835,7 +836,7 @@ tr:nth-child(even) {
 }
 
 .suggestion-item:hover {
-    background-color: #787777;
+    background-color: #bebdbd;
 }
 
 .error-message {
@@ -843,3 +844,274 @@ tr:nth-child(even) {
     padding: 10px;
     font-size: 0.9em;
 }
+
+
+
+
+.booking-container {
+    max-width: 600px;
+    margin: 10vh auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.station-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+    gap: 5px;
+    position: relative;
+}
+
+.station-from{
+    display: none;
+    border: 1px solid gray;
+    position: absolute;
+    background-color: #eaeeed;
+    height: 210px;
+    overflow: scroll;
+    z-index: 10;
+    width: 100%;
+    top: 75px;
+    font-family: "Outfit", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+
+
+}
+
+.station-to{
+    display: none;
+    border: 1px solid gray;
+    position: absolute;
+    background-color: #eaeeed;
+    height: 210px;
+    overflow: scroll;
+    z-index: 10;
+    width: 100%;
+    top: 75px;
+    font-family: "Outfit", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+.station-input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    font-family: "Outfit", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    text-transform: capitalize;
+
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.date-input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    width: 150px;
+}
+
+.date-tabs {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.date-tab {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #666;
+    background: none;
+    cursor: pointer;
+}
+
+.date-tab.active {
+    background: #f0f0f0;
+}
+
+
+.info-icon {
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.search-button {
+    width: 100%;
+    padding: 16px;
+    background-color: #4d9dda; /* Light Blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-top: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-button:hover {
+    background-color: #1e90ff; /* A brighter shade of blue */
+}
+
+
+
+.station-input:focus{
+    outline: none;
+}
+
+.aval-container{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.aval-train {
+    min-width: 600px;
+    max-width: fit-content;
+    margin: 0 auto;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: "Outfit", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+.train-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.train-no {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(26, 20, 20);
+}
+
+.pantry img {
+    width: 20px;
+    height: 20px;
+}
+
+.train-data {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.train-timings {
+    color: #000000;
+    font-size: 1.125rem;
+    font-weight: 600;
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.train-timings span {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.train-sche-link a {
+    color: #3b82f6;
+    font-size: 0.875rem;
+}
+
+.seats {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 16px;
+    gap: 10px;
+}
+
+
+.seat-aval {
+    background-color: #d4fad1;
+    border: 1px solid #6ee7b7;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+   
+}
+
+.seat-aval-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seat-name {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.seat-price {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.seat-aval-details {
+    color: #10b94b;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.seat-aval-chance {
+    color: #10b981;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.red-bg {
+    background-color: rgb(251, 242, 242) !important;
+
+    font-weight: bold;
+  }
+
+  .red-text{
+    color: rgb(215, 79, 79);
+
+  }
