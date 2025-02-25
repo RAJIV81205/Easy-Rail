@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy-Rail</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.freepik.com/512/7995/7995412.png">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <p>Easy-Rail</p>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <div class="navbar" id="navbar">
+            <ul>
+                <li>
+                    <div class="box"><a href="index.html">Home</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="availability.html">Availability</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="train-search.html">Train Search</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="pnr-status.html">PNR Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="live-status.html">Live Status</a></div>
+                </li>
+                <li>
+                    <div class="box"><a href="at-station.html">At Station</a></div>
+                </li>
+            </ul>
+        </div>
+        <div class="account">
+            <img src="https://i.ibb.co/j4hffQ3/user.png" alt="User">
+        </div>
+    </header>
+
+
+
+    <div class="booking-container">
+        <div class="station-selector">
+            <div class="icon-placeholder">
+                <img src="https://cdn.confirmtkt.com/img/icons/ic_search_from.svg" alt="source">
+            </div>
+            <input type="text" class="station-input" id="station-input-from" placeholder="From Station"
+                autocomplete="off">
+            <div class="station-from" id="station-from"></div>
+        </div>
+
+        <div class="station-selector">
+            <div class="icon-placeholder"><img src="https://cdn.confirmtkt.com/img/icons/ic_search_to.svg"
+                    alt="destination"></div>
+            <input type="text" class="station-input" id="station-input-to" placeholder="To Station" autocomplete="off">
+            <div class="station-to" id="station-to"></div>
+        </div>
+
+        <div class="date-selector">
+            <div class="icon-placeholder"><img src="https://cdn.confirmtkt.com/img/icons/ic_search_calender.svg"
+                    alt="calender"></div>
+            <input type="date" class="date-input" id="aval-date">
+            <div class="date-tabs">
+                <button class="date-tab active" id="date-today">Today</button>
+                <button class="date-tab" id="date-tom">Tomorrow</button>
+                <button class="date-tab" id="date-after">Day After</button>
+            </div>
+        </div>
+
+
+        <button class="search-button" id="get-aval">Get availability</button>
+    </div>
+
+    <div class="aval-container">
+        <!-- <div class="aval-train">
+            <div class="train-header">
+                <div class="train-no">12333 - Vibhuti Express</div>
+                <div class="pantry"><img src="" alt="pantry"></div>
+            </div>
+            <div class="train-data">
+                <div class="train-timings"><strong>22:37 ASN</strong> <span>9h 43m</span> <strong>08:15 DDU</strong></div>
+                <div class="train-sche-link"><a href="#">Schedule</a></div>
+            </div>
+            <div class="seats">
+                <div class="seat-aval">
+                    <div class="seat-aval-header">
+                        <div class="seat-name"><strong>SL</strong></div>
+                        <div class="seat-price"><Strong>355</Strong></div>
+                    </div>
+                    <div class="seat-aval-details"><strong>WL 12</strong></div>
+                    <div class="seat-aval-chance">43% Chance</div>
+    
+    
+                </div>
+                <div class="seat-aval">
+                    <div class="seat-aval-header">
+                        <div class="seat-name"><strong>3A</strong></div>
+                        <div class="seat-price"><Strong>955</Strong></div>
+                    </div>
+                    <div class="seat-aval-details"><strong>WL 8</strong></div>
+                    <div class="seat-aval-chance">60% Chance</div>
+    
+    
+                </div>
+                <div class="seat-aval">
+                    <div class="seat-aval-header">
+                        <div class="seat-name"><strong>2A</strong></div>
+                        <div class="seat-price"><Strong>1175</Strong></div>
+                    </div>
+                    <div class="seat-aval-details"><strong>WL 8</strong></div>
+                    <div class="seat-aval-chance">60% Chance</div>
+    
+    
+                </div>
+            </div>
+            
+
+        </div> -->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+
+
+
+</body>
+
+</html>
