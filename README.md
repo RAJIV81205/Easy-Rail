@@ -8,7 +8,10 @@ Effortlessly plan your journey, track trains in real-time, and stay informed wit
 ## 🌟 Features  
 
 ### 🛤️ **Trains Between Stations**  
-- Quickly search trains for your route on a specific date.  
+- Quickly search trains for your route on a specific date.
+
+### 🚉 **Seat Availability**  
+- Get Seat Availability of any Train.  
 
 ### 📅 **Train Timetable**  
 - Access precise schedules for any train by name or number.  
