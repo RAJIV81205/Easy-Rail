@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname)));
 
 app.use(function (req, res, next) {
   // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = [`http://localhost:${PORT}`, 'https://easy-rail.onrender.com', 'https://easy-rail.netlify.app'];
+  const allowedOrigins = [`http://localhost:${PORT}`, 'http://localhost:8000', 'https://easy-rail.netlify.app'];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -42,43 +42,43 @@ app.post('/fetch-train-status', async (req, res) => {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
-    const elementsData = [];
+    // Extract the JavaScript data from the page
+    const scriptContent = $('script').text();
+    const dataMatch = scriptContent.match(/var data = ({.*?});/s);
 
-    $('.row.rs__station-row.flexy').each((index, element) => {
-      const station = $(element).find('.rs__station-name.ellipsis').text().trim();
-      const arr = $(element).find('.col-xs-2:first span').text().trim();
-      var dep = $(element).find('.col-xs-2 span').text().trim();
-      var delay = $(element).find('.rs__station-delay').text().trim();
-      let status = $(element).find('div.circle-thin').length > 0 ? "upcoming" : "crossed";
-      let current = $(element).find('.circle.blink').length > 0 ? "true" : "false";
+    if (!dataMatch) {
+      return res.status(404).json({ error: "Train data not found" });
+    }
 
-      if (delay.length > 10) {
-        delay = delay.slice(9)
+    const trainData = JSON.parse(dataMatch[1]);
+    
+    // Transform the data to match your expected format
+    const elementsData = trainData.Schedule.map((station, index) => {
+      const arrivalDelay = station.arrivalDelay || '';
+      const departureDelay = station.departureDelay || '';
+      
+      // Determine status based on delay presence
+      let status = 'upcoming';
+      let current = 'false';
+      
+      if (arrivalDelay && arrivalDelay !== '-') {
+        status = 'crossed';
       }
-      else {
-        delay = "";
-      }
-
-      if (dep.length > 6) {
-        dep = dep.slice(5, 10);
-      }
-      else {
-        dep = dep
-      }
-
-      elementsData.push({
+      
+      return {
         index,
-        station,
-        arr,
-        dep,
-        delay,
+        station: station.StationName,
+        arr: station.ArrivalTime,
+        dep: station.DepartureTime,
+        delay: arrivalDelay === '-' ? '' : arrivalDelay,
         status,
         current,
-      });
+      };
     });
 
     return res.status(200).json(elementsData);
   } catch (error) {
+    console.error('Error fetching train status:', error.message);
     return res.status(500).json({ error: "Failed to fetch train data" });
   }
 });

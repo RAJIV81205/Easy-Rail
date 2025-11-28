@@ -867,12 +867,12 @@ function showPNRdetails(data) {
 
 
 
-
 async function getStatus() {
   const container = document.getElementById('trainStatusContainer');
   container.innerHTML = '';
 
   console.log("Form submitted");
+
 
   const trainNumber = document.getElementById('trainNumber').value;
 
@@ -889,7 +889,7 @@ async function getStatus() {
   console.log("Date:", dates);
 
   try {
-    const response = await fetch('https://easy-rail.onrender.com/fetch-train-status', {
+    const response = await fetch('/fetch-train-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ trainNumber, dates }),
@@ -996,7 +996,7 @@ async function searchStation() {
   document.getElementById('trainStationContainer').innerHTML = "";
 
   try {
-    const response = await fetch('https://easy-rail.onrender.com/at-station', {
+    const response = await fetch('/at-station', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ stnCode }),
