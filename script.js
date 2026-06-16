@@ -171,192 +171,91 @@ async function fetchTrainDetails(trainNo) {
   const trainScheduleBody = document.getElementById('train-schedule');
   trainScheduleBody.innerHTML = "";
   document.getElementById("schedule-container").style.display = "none";
-
-
   trainTable.style.display = "none";
 
-  if (trainNumber.length != 5) {
+  if (!trainNumber || !/^\d{5}$/.test(trainNumber)) {
     alert("Please enter a valid train number!");
     return;
   }
 
-  try {
-    const response = await fetch(
-      `https://erail.in/rail/getTrains.aspx?TrainNo=${trainNumber}&DataSource=0&Language=0&Cache=true`
-    );
-    const rawData = await response.text();
-
-
-
-    const trainInfo = CheckTrain(rawData);
-
-    if (trainInfo.success) {
-      const data = trainInfo.data;
-
-
-      trainTableBody.innerHTML = "";
-      document.getElementById("train-details").style.padding = "10px";
-      document.getElementById("train-details").style.border = "2px solid black";
-      const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      const runningDaysFormatted = data.running_days
-        .split("")
-        .map((bit, index) => (bit === "1" ? `${weekdays[index]}` : "_"))
-        .join(" ");
-
-
-
-      const details = [
-        { field: "Train Number", value: data.train_no },
-        { field: "Train Name", value: data.train_name },
-        { field: "Source", value: `${data.from_stn_name} (${data.from_stn_code})` },
-        { field: "Destination", value: `${data.to_stn_name} (${data.to_stn_code})` },
-        { field: "Departure", value: data.from_time },
-        { field: "Arrival", value: data.to_time },
-        { field: "Travel Time", value: data.travel_time },
-        { field: "Running Days", value: `${runningDaysFormatted}` },
-        { field: "Train ID", value: data.train_id }
-      ];
-
-      details.forEach((detail) => {
-        const row = document.createElement("tr");
-        const fieldCell = document.createElement("td");
-        const valueCell = document.createElement("td");
-
-        fieldCell.textContent = detail.field;
-        valueCell.textContent = detail.value;
-
-        row.appendChild(fieldCell);
-        row.appendChild(valueCell);
-        trainTableBody.appendChild(row);
-      });
-
-
-      trainTable.style.display = "table";
-    } else {
-      const trainScheduleBody = document.getElementById('train-schedule');
-      document.getElementById("schedule-container").style.display = "none";
-      trainScheduleBody.innerHTML = "";
-      trainTableBody.innerHTML = `<tr><td colspan="2">Error: ${trainInfo.data}</td></tr>`;
-      trainTable.style.display = "table";
-    }
-  } catch (error) {
-    trainTableBody.innerHTML = `<tr><td colspan="2">Error fetching train details. Please try again later.</td></tr>`;
+  const setError = (msg) => {
+    trainTableBody.innerHTML = `<tr><td colspan="2">Error: ${msg}</td></tr>`;
     trainTable.style.display = "table";
-  }
-}
+  };
 
-
-function CheckTrain(string) {
   try {
-    let obj = {};
-    let retval = {};
-    let data = string.split("~~~~~~~~");
-
-    if (
-      data[0] === "~~~~~Please try again after some time." ||
-      data[0] === "~~~~~Train not found"
-    ) {
-      retval["success"] = false;
-      retval["data"] = data[0].replaceAll("~", "");
-      return retval;
+    const response = await fetch('/train-info', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trainNumber }),
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload) {
+      setError(payload?.error || "Failed to fetch train info");
+      return;
     }
 
-    let data1 = data[0].split("~").filter((el) => el !== "");
-    if (data1[1].length > 6) data1.shift();
+    // IRCTC API response: { success, data: { trainInfo: {...}, route: [...] } }
+    const root = (payload.success && payload.data) ? payload.data : payload;
+    const info = root.trainInfo || root;
+    const route = Array.isArray(root.route) ? root.route : [];
 
-    obj["train_no"] = data1[1].replace("^", "");
-    obj["train_name"] = data1[2];
-    obj["from_stn_name"] = data1[3];
-    obj["from_stn_code"] = data1[4];
-    obj["to_stn_name"] = data1[5];
-    obj["to_stn_code"] = data1[6];
-    obj["from_time"] = data1[11].replace(".", ":");
-    obj["to_time"] = data1[12].replace(".", ":");
-    obj["travel_time"] = data1[13].replace(".", ":") + " hrs";
-    obj["running_days"] = data1[14];
+    const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const runningDays = info.running_days || "1111111";
+    const runningDaysFormatted = typeof runningDays === "string" && /^[01]{7}$/.test(runningDays)
+      ? runningDays.split("").map((bit, i) => (bit === "1" ? weekdays[i] : "_")).join(" ")
+      : (runningDays || "N/A");
 
-    let data2 = data[1].split("~").filter((el) => el !== "");
-    obj["type"] = data2[11];
-    obj["train_id"] = data2[12];
-    getRoute(data2[12]);
+    trainTableBody.innerHTML = "";
+    document.getElementById("train-details").style.padding = "10px";
+    document.getElementById("train-details").style.border = "2px solid black";
 
-    retval["success"] = true;
-    retval["data"] = obj;
+    const details = [
+      { field: "Train Number", value: info.train_no || trainNumber },
+      { field: "Train Name", value: info.train_name },
+      { field: "Source", value: info.from_stn_code ? `${info.from_stn_name} (${info.from_stn_code})` : info.from_stn_name },
+      { field: "Destination", value: info.to_stn_code ? `${info.to_stn_name} (${info.to_stn_code})` : info.to_stn_name },
+      { field: "Departure", value: info.from_time },
+      { field: "Arrival", value: info.to_time },
+      { field: "Travel Time", value: info.travel_time ? `${info.travel_time} hrs` : info.travel_time },
+      { field: "Running Days", value: runningDaysFormatted },
+      { field: "Train ID", value: info.train_id },
+    ];
 
-    return retval;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-
-
-
-
-async function getRoute(train_id) {
-  const response = await fetch(`https://erail.in/data.aspx?Action=TRAINROUTE&Password=2012&Data1=${train_id}&Data2=0&Cache=true`);
-  const rawData = await response.text();
-
-
-  const parsedData = parseTrainRoute(rawData);;
-  console.log(parsedData);
-  const trainScheduleBody = document.getElementById('train-schedule');
-  document.getElementById("schedule-container").style.display = "flex";
-  trainScheduleBody.innerHTML = "";
-
-  parsedData.data.forEach((train) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-                <td>${train.source_stn_name}</td>
-                <td>${train.source_stn_code}</td>
-                <td>${train.arrive}</td>
-                <td>${train.depart}</td>
-                <td>${train.distance}</td>
-            `;
-    trainScheduleBody.appendChild(row);
-  });
-
-}
-
-
-
-
-
-
-function parseTrainRoute(string) {
-  try {
-
-    let data = string.split("~^");
-
-
-    let arr = data.map((item) => {
-      let details = item.split("~").filter((el) => el !== "");
-      return {
-        source_stn_name: details[2],
-        source_stn_code: details[1],
-        arrive: details[3].replace(".", ":"),
-        depart: details[4].replace(".", ":"),
-        distance: details[6],
-        day: details[7],
-        zone: details[9],
-      };
+    details.forEach((detail) => {
+      const row = document.createElement("tr");
+      const fieldCell = document.createElement("td");
+      const valueCell = document.createElement("td");
+      fieldCell.textContent = detail.field;
+      valueCell.textContent = detail.value || "N/A";
+      row.appendChild(fieldCell);
+      row.appendChild(valueCell);
+      trainTableBody.appendChild(row);
     });
 
+    trainTable.style.display = "table";
 
-    return {
-      success: true,
-      time_stamp: Date.now(),
-      data: arr,
-    };
-  } catch (err) {
-
-    console.error("Error parsing train route data:", err.message);
-    return {
-      success: false,
-      error: err.message,
-    };
+    if (route.length) {
+      document.getElementById("schedule-container").style.display = "flex";
+      trainScheduleBody.innerHTML = "";
+      route.forEach((stop) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                <td>${stop.stnName || ""}</td>
+                <td>${stop.stnCode || ""}</td>
+                <td>${stop.arrival || ""}</td>
+                <td>${stop.departure || ""}</td>
+                <td>${stop.distance || ""}</td>
+            `;
+        trainScheduleBody.appendChild(row);
+      });
+    }
+  } catch (error) {
+    setError("Failed to fetch train details. Please try again later.");
   }
 }
+
+
 
 
 
@@ -547,24 +446,19 @@ try {
       return;
     }
 
-    const apiUrl = `https://erail.in/rail/getTrains.aspx?Station_From=${from}&Station_To=${to}&DataSource=0&Language=0&Cache=true`;
-
-    fetch(apiUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok. Status: ${response.status}`);
-        }
-        return response.text();
-      })
-      .then(data => {
-        const result = parseTrainData(data);
-
+    fetch('/trains-between', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to }),
+    })
+      .then(response => response.json())
+      .then(result => {
         if (result.success) {
           console.log("Trains Found:", result.data);
-          displayTrains(result.data); // Display trains if found
+          displayTrains(result.data);
         } else {
           console.warn("No trains found:", result.data);
-          alert(result.data); // Alert user if no trains are found
+          alert(result.data);
         }
       })
       .catch(error => {
@@ -753,17 +647,14 @@ function fetchPnrDetails() {
 }
 
 function getPNRdata(pnr) {
-  const url = `https://irctc-indian-railway-pnr-status.p.rapidapi.com/getPNRStatus/${pnr}`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'x-rapidapi-key': 'b0075d9fa8msh81b2609e08877a8p14ff09jsn738ea7672cad',
-      'x-rapidapi-host': 'irctc-indian-railway-pnr-status.p.rapidapi.com'
-    }
-  };
+  const url = '/pnr-status';
 
   try {
-    fetch(url, options)
+    fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ pnr }),
+    })
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -775,24 +666,36 @@ function getPNRdata(pnr) {
 }
 
 function showPNRdetails(data) {
-  if (data.success && data.data) {
-    const journeyDetails = data.data;
-    const DOJ = new Date(journeyDetails.dateOfJourney).toLocaleDateString();
+  if (data && data.success && data.data) {
+    const d = data.data;
+    const journey = d.journey || {};
+    const train = d.train || {};
+    const chart = d.chart || {};
+    const booking = d.booking || {};
+    const source = journey.source || {};
+    const destination = journey.destination || {};
+    const boarding = journey.boardingPoint || {};
 
-    let passengerRows = journeyDetails.passengerList.map(passenger => `
+    const DOJ = journey.dateOfJourney ? new Date(journey.dateOfJourney).toLocaleDateString() : 'N/A';
+
+    const passengerRows = (d.passengers || []).map(passenger => {
+      const b = passenger.booking || {};
+      const c = passenger.current || {};
+      return `
           <tr>
-              <td>${passenger.passengerSerialNumber}</td>
-              <td>${passenger.bookingStatusDetails}</td>
-              <td>${passenger.currentStatusDetails}</td>
+              <td>${passenger.serialNumber ?? ''}</td>
+              <td>${b.details ?? b.status ?? ''}</td>
+              <td>${c.details ?? c.status ?? ''}</td>
           </tr>
-      `).join('');
+      `;
+    }).join('');
 
-    let output = `
+    const output = `
           <h2> PNR Status Details </h2>
           <table border="1" cellpadding="10">
               <tr>
                   <th>PNR Number</th>
-                  <td>${journeyDetails.pnrNumber}</td>
+                  <td>${d.pnr ?? ''}</td>
               </tr>
               <tr>
                   <th>Date of Journey</th>
@@ -800,39 +703,43 @@ function showPNRdetails(data) {
               </tr>
               <tr>
                   <th>Train Number</th>
-                  <td>${journeyDetails.trainNumber}</td>
+                  <td>${train.number ?? ''}</td>
               </tr>
               <tr>
                   <th>Train Name</th>
-                  <td>${journeyDetails.trainName}</td>
+                  <td>${train.name ?? ''}</td>
               </tr>
               <tr>
                   <th>Source Station</th>
-                  <td>${journeyDetails.sourceStation}</td>
+                  <td>${source.name ? `${source.name} (${source.code ?? ''})` : ''}</td>
               </tr>
               <tr>
                   <th>Destination Station</th>
-                  <td>${journeyDetails.destinationStation}</td>
+                  <td>${destination.name ? `${destination.name} (${destination.code ?? ''})` : ''}</td>
               </tr>
               <tr>
                   <th>Boarding Point</th>
-                  <td>${journeyDetails.boardingPoint}</td>
+                  <td>${boarding.name ? `${boarding.name} (${boarding.code ?? ''})` : ''}</td>
               </tr>
               <tr>
                   <th>Journey Class</th>
-                  <td>${journeyDetails.journeyClass}</td>
+                  <td>${journey.class ?? ''}</td>
+              </tr>
+              <tr>
+                  <th>Quota</th>
+                  <td>${journey.quota ?? ''}</td>
               </tr>
               <tr>
                   <th>Chart Status</th>
-                  <td>${journeyDetails.chartStatus}</td>
+                  <td>${chart.status ?? ''}</td>
               </tr>
               <tr>
                   <th>Total Distance</th>
-                  <td>${journeyDetails.distance} km</td>
+                  <td>${journey.distance ?? ''} km</td>
               </tr>
               <tr>
                   <th>Fare</th>
-                  <td>₹${journeyDetails.bookingFare}</td>
+                  <td>₹${booking.fare ?? ''}</td>
               </tr>
           </table>
 
@@ -1240,8 +1147,19 @@ try {
     const indianFormatDate = `${day}-${month}-${year}`;
     console.log(indianFormatDate);
 
-    const response = await fetch(`https://cttrainsapi.confirmtkt.com/api/v1/trains/search?sourceStationCode=${from}&destinationStationCode=${to}&addAvailabilityCache=true&excludeMultiTicketAlternates=false&excludeBoostAlternates=false&sortBy=DEFAULT&dateOfJourney=${indianFormatDate}&enableNearby=true&enableTG=true&tGPlan=CTG-3&showTGPrediction=false&tgColor=DEFAULT&showPredictionGlobal=true`);
-    const data = await response.json()
+    const response = await fetch('/search-with-availability', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to, date: indianFormatDate }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Availability error:', data);
+      const container = document.querySelector(".aval-container");
+      container.innerHTML = `<p id="error">${data?.error || "Failed to fetch availability"}</p>`;
+      return;
+    }
 
     getAvailability(data)
 
